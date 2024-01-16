@@ -39,13 +39,13 @@ import yass.jouao.labx.repositories.ITestTypeRepository;
 import yass.jouao.labx.repositories.IUserLabRepository;
 
 @SpringBootApplication
-public class LabxApplication implements CommandLineRunner {
+public class LabxApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LabxApplication.class, args);
 	}
 
-	Random random = new Random();
+	/*Random random = new Random();
 	@Autowired
 	IFournisseurRepository fournisseurRepository;
 	@Autowired
@@ -292,6 +292,6 @@ public class LabxApplication implements CommandLineRunner {
 			testReagent2.setTest(test);
 			testReagentRepository.save(testReagent2);
 		}
-	}
+	}*/
 
 }
