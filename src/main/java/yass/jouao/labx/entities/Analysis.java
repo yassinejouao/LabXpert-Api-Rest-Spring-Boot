@@ -36,7 +36,7 @@ public class Analysis {
 	@ManyToOne
 	private AnalysisType analysisType;
 	@Column(nullable = false)
-	private LocalDateTime starDate;
+	private LocalDateTime startDate;
 	@Column(nullable = false)
 	private LocalDateTime endDate;
 	private Boolean resultAnalysis;
