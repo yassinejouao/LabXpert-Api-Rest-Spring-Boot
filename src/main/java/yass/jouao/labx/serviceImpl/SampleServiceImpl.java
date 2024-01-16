@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import yass.jouao.labx.entities.Sample;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.ISampleRepository;
-import yass.jouao.labx.services.SampleService;
+import yass.jouao.labx.services.ISampleService;
 
-public class SampleServiceImpl implements SampleService {
+public class SampleServiceImpl implements ISampleService {
 
 	@Autowired
 	private ISampleRepository sampleRepository;

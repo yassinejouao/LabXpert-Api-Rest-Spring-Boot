@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import yass.jouao.labx.entities.Patient;
 
-public interface PatientService {
+public interface IPatientService {
 	Optional<Patient> getPatientByIdService(Long id);
 
 	Patient addPatientService(Patient p);

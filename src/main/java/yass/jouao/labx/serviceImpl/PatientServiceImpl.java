@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import yass.jouao.labx.entities.Patient;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IPatientRepository;
-import yass.jouao.labx.services.PatientService;
+import yass.jouao.labx.services.IPatientService;
 
-public class PatientServiceImpl implements PatientService {
+public class PatientServiceImpl implements IPatientService {
 
 	@Autowired
 	private IPatientRepository patientRepository;

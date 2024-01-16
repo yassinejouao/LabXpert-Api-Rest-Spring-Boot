@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import yass.jouao.labx.entities.UserLab;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IUserLabRepository;
-import yass.jouao.labx.services.UserLabService;
+import yass.jouao.labx.services.IUserLabService;
 
-public class UserLabServiceImpl implements UserLabService {
+public class UserLabServiceImpl implements IUserLabService {
 	@Autowired
 	private IUserLabRepository userLabRepository;
 
