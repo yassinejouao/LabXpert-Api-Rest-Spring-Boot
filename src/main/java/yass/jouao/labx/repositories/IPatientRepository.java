@@ -7,5 +7,4 @@ import yass.jouao.labx.entities.Patient;
 
 @Repository
 public interface IPatientRepository extends JpaRepository<Patient, Long> {
-
 }

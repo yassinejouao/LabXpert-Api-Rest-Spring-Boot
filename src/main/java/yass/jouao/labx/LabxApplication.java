@@ -246,7 +246,7 @@ public class LabxApplication {
 		analysisforpatient1.setUser(technician);
 		analysisforpatient1.setPatient(patient1);
 		analysisforpatient1.setAnalysisType(diabeteAnalysisType);
-		analysisforpatient1.setStarDate(LocalDateTime.now());
+		analysisforpatient1.setStartDate(LocalDateTime.now());
 		analysisforpatient1.setEndDate(LocalDateTime.now().plusDays(10));
 		analysisforpatient1.setStatus(AnalysisStatus.WAITING);
 		analysisRepository.save(analysisforpatient1);
@@ -263,7 +263,7 @@ public class LabxApplication {
 		analysisforpatient2.setSample(Sampleforpatient2);
 		analysisforpatient2.setUser(technician);
 		analysisforpatient2.setPatient(patient2);
-		analysisforpatient2.setStarDate(LocalDateTime.now());
+		analysisforpatient2.setStartDate(LocalDateTime.now());
 		analysisforpatient2.setEndDate(LocalDateTime.now().plusDays(10));
 		analysisforpatient2.setStatus(AnalysisStatus.WAITING);
 		analysisforpatient2.setAnalysisType(gastroAnalysisType);
