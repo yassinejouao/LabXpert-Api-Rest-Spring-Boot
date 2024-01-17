@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import yass.jouao.labx.entities.Sample;
 
-public interface SampleService {
+public interface ISampleService {
 	Optional<Sample> getSampleByIdService(Long id);
 
 	Sample addSampleService(Sample s);

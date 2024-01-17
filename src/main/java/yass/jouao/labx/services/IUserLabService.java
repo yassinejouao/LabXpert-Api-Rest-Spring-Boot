@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import yass.jouao.labx.entities.UserLab;
 
-public interface UserLabService {
+public interface IUserLabService {
 	Optional<UserLab> getUserLabByIdService(Long id);
 
 	UserLab updateUserLabService(UserLab u);
