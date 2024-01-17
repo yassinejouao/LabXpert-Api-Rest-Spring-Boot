@@ -40,7 +40,7 @@ public class TestTypeServiceImpl implements ITestTypeService {
 
 	@Override
 	@Transactional
-	public TestType updateTestTypeService(TestType tt) {
+	public TestType updateTestTypeService(TestType tt) throws NotFoundException {
 		if (testTypeRepository.existsById(tt.getId())) {
 			return testTypeRepository.save(tt);
 		} else {
@@ -50,7 +50,7 @@ public class TestTypeServiceImpl implements ITestTypeService {
 
 	@Override
 	@Transactional
-	public void deleteTestTypeService(Long id) {
+	public void deleteTestTypeService(Long id) throws NotFoundException {
 		if (testTypeRepository.findById(id).isPresent()) {
 			testTypeRepository.deleteById(id);
 		} else {

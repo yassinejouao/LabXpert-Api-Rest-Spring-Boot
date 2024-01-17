@@ -39,7 +39,7 @@ public class ReagentServiceImpl implements IReagentService {
 
 	@Override
 	@Transactional
-	public Reagent updateReagentService(Reagent r) {
+	public Reagent updateReagentService(Reagent r) throws NotFoundException {
 		if (reagentRepository.existsById(r.getId())) {
 			return reagentRepository.save(r);
 		} else {
@@ -49,7 +49,7 @@ public class ReagentServiceImpl implements IReagentService {
 
 	@Override
 	@Transactional
-	public void deleteReagentService(Long id) {
+	public void deleteReagentService(Long id) throws NotFoundException {
 		if (reagentRepository.existsById(id)) {
 			reagentRepository.deleteById(id);
 		} else {

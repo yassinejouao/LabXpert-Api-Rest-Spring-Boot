@@ -25,7 +25,7 @@ public class UserLabServiceImpl implements IUserLabService {
 
 	@Override
 	@Transactional
-	public UserLab updateUserLabService(UserLab u) {
+	public UserLab updateUserLabService(UserLab u) throws NotFoundException {
 		if (userLabRepository.existsById(u.getId())) {
 			return userLabRepository.save(u);
 		} else {

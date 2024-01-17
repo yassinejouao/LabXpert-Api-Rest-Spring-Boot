@@ -32,7 +32,7 @@ public class TestReagentServiceImpl implements ITestReagentService {
 
 	@Override
 	@Transactional
-	public TestReagent updateTestReagentService(TestReagent tr) {
+	public TestReagent updateTestReagentService(TestReagent tr) throws NotFoundException {
 		if (testReagentRepository.existsById(tr.getId())) {
 			return testReagentRepository.save(tr);
 		} else {
@@ -42,7 +42,7 @@ public class TestReagentServiceImpl implements ITestReagentService {
 
 	@Override
 	@Transactional
-	public void deleteTestReagentService(Long id) {
+	public void deleteTestReagentService(Long id) throws NotFoundException {
 		if (testReagentRepository.existsById(id)) {
 			testReagentRepository.deleteById(id);
 		} else {
@@ -53,7 +53,7 @@ public class TestReagentServiceImpl implements ITestReagentService {
 
 	@Override
 	@Transactional
-	public void deleteByTestService(Test t) {
+	public void deleteByTestService(Test t) throws NotFoundException {
 		if (testReagentRepository.existsByTest(t)) {
 			testReagentRepository.deleteByTest(t);
 		} else {

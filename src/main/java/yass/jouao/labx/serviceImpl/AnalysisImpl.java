@@ -54,7 +54,7 @@ public class AnalysisImpl implements IAnalysisService {
 
 	@Override
 	@Transactional
-	public Analysis updateAnalysisService(Analysis a) {
+	public Analysis updateAnalysisService(Analysis a) throws NotFoundException {
 		if (analysisRepository.existsById(a.getId())) {
 			return analysisRepository.save(a);
 		} else {

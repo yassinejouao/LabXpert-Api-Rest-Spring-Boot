@@ -32,7 +32,7 @@ public class SampleServiceImpl implements ISampleService {
 
 	@Override
 	@Transactional
-	public Sample updateSampleService(Sample s) {
+	public Sample updateSampleService(Sample s) throws NotFoundException {
 		if (sampleRepository.existsById(s.getId())) {
 			return sampleRepository.save(s);
 		} else {

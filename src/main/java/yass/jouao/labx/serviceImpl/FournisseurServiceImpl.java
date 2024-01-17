@@ -40,7 +40,7 @@ public class FournisseurServiceImpl implements IFournisseurService {
 
 	@Override
 	@Transactional
-	public Fournisseur updateFournisseurService(Fournisseur f) {
+	public Fournisseur updateFournisseurService(Fournisseur f) throws NotFoundException {
 		if (fournisseurRepository.existsById(f.getId())) {
 			return fournisseurRepository.save(f);
 		} else {
@@ -50,7 +50,7 @@ public class FournisseurServiceImpl implements IFournisseurService {
 
 	@Override
 	@Transactional
-	public void deleteFournisseurService(Long id) {
+	public void deleteFournisseurService(Long id) throws NotFoundException {
 		if (fournisseurRepository.existsById(id)) {
 			fournisseurRepository.deleteById(id);
 		} else {

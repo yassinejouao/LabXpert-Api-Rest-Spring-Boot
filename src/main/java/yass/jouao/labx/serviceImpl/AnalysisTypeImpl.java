@@ -32,7 +32,7 @@ public class AnalysisTypeImpl implements IAnalysisTypeService {
 
 	@Override
 	@Transactional
-	public AnalysisType updateAnalysisType(AnalysisType at) {
+	public AnalysisType updateAnalysisType(AnalysisType at) throws NotFoundException {
 		if (analysisTypeRepository.existsById(at.getId())) {
 			return analysisTypeRepository.save(at);
 		} else {
@@ -42,7 +42,7 @@ public class AnalysisTypeImpl implements IAnalysisTypeService {
 
 	@Override
 	@Transactional
-	public void deleteAnalysisType(Long id) {
+	public void deleteAnalysisType(Long id) throws NotFoundException {
 		if (analysisTypeRepository.existsById(id)) {
 			analysisTypeRepository.deleteById(id);
 		} else {
