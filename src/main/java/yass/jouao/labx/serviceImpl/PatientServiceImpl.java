@@ -1,5 +1,6 @@
 package yass.jouao.labx.serviceImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -20,8 +21,14 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	@Transactional
-	public Optional<Patient> getPatientByIdService(Long id) {
-		return patientRepository.findById(id);
+	public Patient getPatientByIdService(Long id) throws NotFoundException {
+		Optional<Patient> optionalPatient = patientRepository.findById(id);
+		if (optionalPatient.isPresent()) {
+			return optionalPatient.get();
+		} else {
+			System.out.println("test ex");
+			throw new NotFoundException("Patient not found");
+		}
 	}
 
 	@Override
@@ -32,7 +39,7 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	@Transactional
-	public Patient updatePatientService(Patient p) {
+	public Patient updatePatientService(Patient p) throws NotFoundException {
 		if (patientRepository.existsById(p.getId())) {
 			return patientRepository.save(p);
 		} else {
@@ -42,13 +49,18 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	@Transactional
-	public void deletePatientService(Long id) {
+	public void deletePatientService(Long id) throws NotFoundException {
 		if (patientRepository.existsById(id)) {
 			patientRepository.deleteById(id);
 		} else {
 			throw new NotFoundException("Patient not found");
 		}
 
+	}
+
+	@Override
+	public List<Patient> getAllPatientsService() {
+		return patientRepository.findAll();
 	}
 
 }

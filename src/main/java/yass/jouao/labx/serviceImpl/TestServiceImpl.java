@@ -37,7 +37,7 @@ public class TestServiceImpl implements ITestService {
 
 	@Override
 	@Transactional
-	public Test updateTestService(Test t) {
+	public Test updateTestService(Test t) throws NotFoundException {
 		if (testRepository.existsById(t.getId())) {
 			return testRepository.save(t);
 		} else {

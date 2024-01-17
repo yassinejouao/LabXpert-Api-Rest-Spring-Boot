@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import yass.jouao.labx.entities.Test;
+import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface ITestService {
 	List<Test> getAllTestService();
@@ -12,6 +13,6 @@ public interface ITestService {
 
 	Test addTestService(Test t);
 
-	Test updateTestService(Test t);
+	Test updateTestService(Test t) throws NotFoundException;
 
 }

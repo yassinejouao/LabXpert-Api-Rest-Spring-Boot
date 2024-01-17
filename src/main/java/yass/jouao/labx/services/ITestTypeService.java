@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import yass.jouao.labx.entities.Analysis;
 import yass.jouao.labx.entities.TestType;
+import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface ITestTypeService {
 	List<TestType> getAllTestTypesService();
@@ -15,8 +16,8 @@ public interface ITestTypeService {
 
 	TestType addTestTypeService(TestType tt);
 
-	TestType updateTestTypeService(TestType tt);
+	TestType updateTestTypeService(TestType tt) throws NotFoundException;
 
-	void deleteTestTypeService(Long id);
+	void deleteTestTypeService(Long id) throws NotFoundException;
 
 }
