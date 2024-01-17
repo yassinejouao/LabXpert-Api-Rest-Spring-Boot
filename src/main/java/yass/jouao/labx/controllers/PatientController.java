@@ -31,11 +31,17 @@ public class PatientController {
 	private ObjectMapper objectMapper;
 
 	@GetMapping("/all")
-	public List<PatientDTO> patients() {
-		List<Patient> patients = patientServiceImpl.getAllPatientsService();
-		List<PatientDTO> patientDTOs = patients.stream().map(patient -> patientMapper.fromPatientToPatientDTO(patient))
-				.collect(Collectors.toList());
-		return patientDTOs;
+	public ResponseEntity<?> patients() {
+		try {
+			List<Patient> patients = patientServiceImpl.getAllPatientsService();
+			List<PatientDTO> patientDTOs = patients.stream()
+					.map(patient -> patientMapper.fromPatientToPatientDTO(patient)).collect(Collectors.toList());
+			String json = objectMapper.writerWithView(PatientDTO.viewPatient.class).writeValueAsString(patientDTOs);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 	}
 
 	@GetMapping("/{patientId}")

@@ -25,6 +25,6 @@ public class PatientDTO {
 	private LocalDate dateOfBirth;
 	@JsonView({ viewPatient.class, savePatient.class })
 	private Sex sex;
-	@JsonView({ viewPatient.class, savePatient.class })
+	@JsonView({ savePatient.class })
 	private String phone;
 }
