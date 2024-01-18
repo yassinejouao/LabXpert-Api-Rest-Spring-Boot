@@ -1,50 +1,50 @@
 package yass.jouao.labx.serviceImpl;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import yass.jouao.labx.DTOs.PatientDTO;
 import yass.jouao.labx.entities.Patient;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IPatientRepository;
+import yass.jouao.labx.serviceImpl.Mappers.PatientMapper;
 import yass.jouao.labx.services.IPatientService;
 
 @Service
 public class PatientServiceImpl implements IPatientService {
 
 	@Autowired
+	private PatientMapper patientMapper;
+
+	@Autowired
 	private IPatientRepository patientRepository;
 
 	@Override
 	@Transactional
-	public Patient getPatientByIdService(Long id) throws NotFoundException {
+	public PatientDTO getPatientByIdService(Long id) throws NotFoundException {
 		Optional<Patient> optionalPatient = patientRepository.findById(id);
 		if (optionalPatient.isPresent()) {
-			return optionalPatient.get();
+
+			PatientDTO patientDTO = patientMapper.fromPatientToPatientDTO(optionalPatient.get());
+			return patientDTO;
 		} else {
-			System.out.println("test ex");
 			throw new NotFoundException("Patient not found");
 		}
 	}
 
 	@Override
 	@Transactional
-	public Patient addPatientService(Patient p) {
-		return patientRepository.save(p);
-	}
-
-	@Override
-	@Transactional
-	public Patient updatePatientService(Patient p) throws NotFoundException {
-		if (patientRepository.existsById(p.getId())) {
-			return patientRepository.save(p);
-		} else {
-			throw new NotFoundException("you can't update unexist patient");
-		}
+	public PatientDTO addPatientService(PatientDTO p) {
+		Patient patient = patientMapper.fromPatientDTOToPatient(p);
+		PatientDTO patientDTO = patientMapper.fromPatientToPatientDTO(patientRepository.save(patient));
+		return patientDTO;
 	}
 
 	@Override
@@ -59,8 +59,33 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public List<Patient> getAllPatientsService() {
-		return patientRepository.findAll();
+	public List<PatientDTO> getAllPatientsService() {
+		List<Patient> patients = patientRepository.findAll();
+		List<PatientDTO> patientDTOs = patients.stream().map(patient -> patientMapper.fromPatientToPatientDTO(patient))
+				.collect(Collectors.toList());
+		return patientDTOs;
+	}
+
+	@Override
+	@Transactional
+	public PatientDTO updatePatientService(PatientDTO p) throws NotFoundException, IllegalAccessException {
+		Patient patientToUpdate = patientMapper.fromPatientDTOToPatient(getPatientByIdService(p.getId()));
+		Patient patientNewDate = patientMapper.fromPatientDTOToPatient(p);
+		updateNonNullFields(patientToUpdate, patientNewDate);
+		PatientDTO patientDTO = patientMapper.fromPatientToPatientDTO(patientRepository.save(patientToUpdate));
+		System.out.println("updated");
+		return patientDTO;
+	}
+
+	private void updateNonNullFields(Patient existingEntity, Patient updatedEntity) throws IllegalAccessException {
+		Field[] fields = Patient.class.getDeclaredFields();
+		for (Field field : fields) {
+			field.setAccessible(true);
+			Object updatedValue = field.get(updatedEntity);
+			if (updatedValue != null) {
+				field.set(existingEntity, updatedValue);
+			}
+		}
 	}
 
 }
