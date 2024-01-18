@@ -9,7 +9,7 @@ import yass.jouao.labx.exeptions.NotFoundException;
 public interface IFournisseurService {
 	List<Fournisseur> getAllFournisseursService();
 
-	Optional<Fournisseur> getFournisseurByIdService(Long id);
+	Fournisseur getFournisseurByIdService(Long id) throws NotFoundException;
 
 	Fournisseur addFournisseurService(Fournisseur f);
 

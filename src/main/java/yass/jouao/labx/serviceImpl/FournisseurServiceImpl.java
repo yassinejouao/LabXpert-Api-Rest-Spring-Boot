@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yass.jouao.labx.entities.Fournisseur;
+import yass.jouao.labx.entities.Patient;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IFournisseurRepository;
 import yass.jouao.labx.services.IFournisseurService;
@@ -27,8 +28,14 @@ public class FournisseurServiceImpl implements IFournisseurService {
 
 	@Override
 	@Transactional
-	public Optional<Fournisseur> getFournisseurByIdService(Long id) {
-		return fournisseurRepository.findById(id);
+	public Fournisseur getFournisseurByIdService(Long id) throws NotFoundException {
+		Optional<Fournisseur> optionalFournisseur = fournisseurRepository.findById(id);
+		if (optionalFournisseur.isPresent()) {
+			return optionalFournisseur.get();
+		} else {
+			System.out.println("test ex");
+			throw new NotFoundException("Fournisseur not found");
+		}
 	}
 
 	@Override
