@@ -14,4 +14,10 @@ public class PatientMapper {
 		BeanUtils.copyProperties(patient, patientDTO);
 		return patientDTO;
 	}
+
+	public Patient fromPatientDTOToPatient(PatientDTO patientDTO) {
+		Patient patient = new Patient();
+		BeanUtils.copyProperties(patientDTO, patient);
+		return patient;
+	}
 }

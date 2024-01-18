@@ -19,8 +19,13 @@ public class UserLabServiceImpl implements IUserLabService {
 
 	@Override
 	@Transactional
-	public Optional<UserLab> getUserLabByIdService(Long id) {
-		return userLabRepository.findById(id);
+	public UserLab getUserLabByIdService(Long id) throws NotFoundException {
+		Optional<UserLab> optionalUserLab = userLabRepository.findById(id);
+		if (optionalUserLab.isPresent()) {
+			return optionalUserLab.get();
+		} else {
+			throw new NotFoundException("Patient not found");
+		}
 	}
 
 	@Override
@@ -31,6 +36,11 @@ public class UserLabServiceImpl implements IUserLabService {
 		} else {
 			throw new NotFoundException("you can't update unexist User");
 		}
+	}
+
+	@Override
+	public UserLab addUserLabService(UserLab u) {
+		return userLabRepository.save(u);
 	}
 
 }
