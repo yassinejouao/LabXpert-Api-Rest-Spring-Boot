@@ -31,7 +31,6 @@ public class PatientServiceImpl implements IPatientService {
 	public PatientDTO getPatientByIdService(Long id) throws NotFoundException {
 		Optional<Patient> optionalPatient = patientRepository.findById(id);
 		if (optionalPatient.isPresent()) {
-
 			PatientDTO patientDTO = patientMapper.fromPatientToPatientDTO(optionalPatient.get());
 			return patientDTO;
 		} else {
@@ -68,12 +67,13 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	@Transactional
-	public PatientDTO updatePatientService(PatientDTO p) throws NotFoundException, IllegalAccessException {
-		Patient patientToUpdate = patientMapper.fromPatientDTOToPatient(getPatientByIdService(p.getId()));
-		Patient patientNewDate = patientMapper.fromPatientDTOToPatient(p);
-		updateNonNullFields(patientToUpdate, patientNewDate);
+	public PatientDTO updatePatientService(Long patientId, PatientDTO p)
+			throws NotFoundException, IllegalAccessException {
+		Patient patientToUpdate = patientMapper.fromPatientDTOToPatient(getPatientByIdService(patientId));
+		p.setId(patientId);
+		Patient patientNewData = patientMapper.fromPatientDTOToPatient(p);
+		updateNonNullFields(patientToUpdate, patientNewData);
 		PatientDTO patientDTO = patientMapper.fromPatientToPatientDTO(patientRepository.save(patientToUpdate));
-		System.out.println("updated");
 		return patientDTO;
 	}
 

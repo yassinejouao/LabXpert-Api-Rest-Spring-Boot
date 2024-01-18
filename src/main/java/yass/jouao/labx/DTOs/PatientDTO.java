@@ -2,17 +2,16 @@ package yass.jouao.labx.DTOs;
 
 import java.time.LocalDate;
 
-import org.hibernate.annotations.DynamicInsert;
-
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import yass.jouao.labx.enums.Sex;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-@DynamicInsert
 public class PatientDTO {
 
 	public interface viewPatient {

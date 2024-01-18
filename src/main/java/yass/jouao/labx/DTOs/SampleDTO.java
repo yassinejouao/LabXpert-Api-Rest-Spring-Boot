@@ -1,7 +1,8 @@
 package yass.jouao.labx.DTOs;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 import yass.jouao.labx.enums.SampleStatus;
@@ -9,10 +10,25 @@ import yass.jouao.labx.enums.SampleType;
 
 @Data
 public class SampleDTO {
-	private long id;
-	private SampleType type;
-	private SampleStatus status;
-	private LocalDateTime date;
-	private Collection<AnalysisDTO> analysis;
 
+	public interface saveSample {
+	}
+
+	public interface viewSample {
+	}
+
+	public interface updateStatus {
+	}
+
+	@JsonView({ viewSample.class })
+	private long id;
+	@JsonView({ saveSample.class, viewSample.class })
+	private SampleType type;
+	@JsonView({ saveSample.class, viewSample.class, updateStatus.class })
+	private SampleStatus status;
+	@JsonView({ saveSample.class, viewSample.class })
+	private LocalDateTime date;
+	// USE IN ADD TO AFFECT USER
+	@JsonView({ saveSample.class })
+	private long idPatient;
 }

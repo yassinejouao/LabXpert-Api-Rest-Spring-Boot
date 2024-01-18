@@ -69,10 +69,10 @@ public class PatientController {
 		}
 	}
 
-	@PostMapping("/update")
-	public ResponseEntity<?> updatePatient(@RequestBody PatientDTO patientDTO) {
+	@PostMapping("/update/{patientId}")
+	public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientDTO patientDTO) {
 		try {
-			patientDTO = patientServiceImpl.updatePatientService(patientDTO);
+			patientDTO = patientServiceImpl.updatePatientService(patientId, patientDTO);
 			String json = objectMapper.writerWithView(PatientDTO.viewPatient.class).writeValueAsString(patientDTO);
 			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (NotFoundException e) {
