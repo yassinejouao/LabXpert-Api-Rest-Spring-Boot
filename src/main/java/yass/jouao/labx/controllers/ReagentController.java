@@ -9,10 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yass.jouao.labx.DTOs.MessageErrorDTO;
 import yass.jouao.labx.DTOs.ReagentDTO;
-import yass.jouao.labx.DTOs.SampleDTO;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.serviceImpl.ReagentServiceImpl;
-import yass.jouao.labx.serviceImpl.SampleServiceImpl;
 
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class ReagentController {
 	}
 
 	@GetMapping("/fournisseur/{id}")
-	public ResponseEntity<?> getReagentsByPatient(@PathVariable Long id) {
+	public ResponseEntity<?> getReagentsByFournisseur(@PathVariable Long id) {
 		try {
 			List<ReagentDTO> reagentDTOs = reagentService.getReagentsByIdFournisseur(id);
 			String json = objectMapper.writerWithView(ReagentDTO.viewReagent.class).writeValueAsString(reagentDTOs);
@@ -55,11 +53,11 @@ public class ReagentController {
 	}
 
 	@PostMapping("/update/{id}")
-	public ResponseEntity<?> updateStatusSample(@PathVariable Long id,
+	public ResponseEntity<?> updateReagent(@PathVariable Long id,
 			@RequestBody @JsonView(ReagentDTO.updateReagent.class) ReagentDTO reagentDTO) {
 		try {
 			reagentDTO = reagentService.updateReagentService(id, reagentDTO);
-			String json = objectMapper.writerWithView(SampleDTO.viewSample.class).writeValueAsString(reagentDTO);
+			String json = objectMapper.writerWithView(ReagentDTO.viewReagent.class).writeValueAsString(reagentDTO);
 			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
 		} catch (NotFoundException e) {
 			MessageErrorDTO errorResponse = new MessageErrorDTO(e.getMessage());
