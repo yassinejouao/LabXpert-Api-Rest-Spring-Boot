@@ -3,70 +3,154 @@ package yass.jouao.labx.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import yass.jouao.labx.DTOs.AnalysisDTO;
 import yass.jouao.labx.entities.Analysis;
+import yass.jouao.labx.entities.AnalysisType;
+import yass.jouao.labx.entities.Patient;
+import yass.jouao.labx.entities.Sample;
 import yass.jouao.labx.entities.Test;
 import yass.jouao.labx.entities.TestType;
+import yass.jouao.labx.entities.UserLab;
+import yass.jouao.labx.enums.ResultTest;
 import yass.jouao.labx.enums.TestStatus;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IAnalysisRepository;
+import yass.jouao.labx.repositories.IAnalysisTypeRepository;
+import yass.jouao.labx.repositories.IPatientRepository;
+import yass.jouao.labx.repositories.ISampleRepository;
+import yass.jouao.labx.repositories.ITestRepository;
+import yass.jouao.labx.repositories.IUserLabRepository;
+import yass.jouao.labx.serviceImpl.Mappers.AnalysisMapper;
 import yass.jouao.labx.services.IAnalysisService;
 
 @Service
 public class AnalysisImpl implements IAnalysisService {
 
 	@Autowired
+	private AnalysisMapper analysisMapper;
+	@Autowired
 	private TestTypeServiceImpl testTypeServiceImpl;
 	@Autowired
 	private IAnalysisRepository analysisRepository;
 	@Autowired
-	private TestServiceImpl testServiceImpl;
+	private IPatientRepository patientRepository;
+	@Autowired
+	private ISampleRepository sampleRepository;
+	@Autowired
+	private IUserLabRepository userLabRepository;
+	@Autowired
+	private IAnalysisTypeRepository analysisTypeRepository;
+	@Autowired
+	private ITestRepository testRepository;
 
 	@Override
-	@Transactional
-	public List<Analysis> getAllAnalysisService() {
-		return analysisRepository.findAll();
+	public List<AnalysisDTO> getAllAnalysisService() throws NotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	@Transactional
-	public Optional<Analysis> getAnalysisByIdService(Long id) {
-		return analysisRepository.findById(id);
+	public AnalysisDTO getAnalysisDTOByIdService(Long id) throws NotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	@Transactional
-	public Analysis addAnalysisService(Analysis a) {
-		List<TestType> testTypes = testTypeServiceImpl.getAllTestTypesByAnalysis(a);
-		for (TestType testType : testTypes) {
-			Test test = new Test();
-			test.setTestType(testType);
-			test.setAnalysis(a);
-			test.setStatus(TestStatus.WAITING);
-			testServiceImpl.addTestService(test);
-		}
-		return analysisRepository.save(a);
+	public Analysis getAnalysisByIdService(Long id) throws NotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	@Transactional
-	public Analysis updateAnalysisService(Analysis a) throws NotFoundException {
-		if (analysisRepository.existsById(a.getId())) {
-			return analysisRepository.save(a);
+	public AnalysisDTO addAnalysisService(AnalysisDTO a) throws NotFoundException {
+		Analysis analysis = analysisMapper.fromAnalysisDTOToAnalysis(a);
+		Optional<Patient> optionalPatient = patientRepository.findById(a.getIdPatient());
+		Optional<Sample> optionalSample = sampleRepository.findById(a.getIdSample());
+		Optional<UserLab> optionalUser = userLabRepository.findById(a.getIdUserLab());
+		Optional<AnalysisType> optionalAnalysisType = analysisTypeRepository.findById(a.getIdAnalysisType());
+		if (optionalPatient.isPresent() && optionalSample.isPresent() && optionalUser.isPresent()
+				&& optionalAnalysisType.isPresent()) {
+			if (!optionalPatient.get().getSamples().contains(optionalSample.get())) {
+				throw new NotFoundException("Patient don't have this sample");
+			}
+			analysis.setPatient(optionalPatient.get());
+			analysis.setSample(optionalSample.get());
+			analysis.setUser(optionalUser.get());
+			analysis.setAnalysisType(optionalAnalysisType.get());
+			List<TestType> testTypes = testTypeServiceImpl.getAllTestTypesByAnalysis(analysis);
+			Analysis analysis2 = analysisRepository.save(analysis);
+			for (TestType testType : testTypes) {
+				Test test = new Test();
+				test.setTestType(testType);
+				test.setAnalysis(analysis);
+				test.setResult(null);
+				test.setResultTest(null);
+				test.setStatus(TestStatus.WAITING);
+				test.setResult(ResultTest.WAITING);
+				testRepository.save(test);
+			}
+			return analysisMapper.fromAnalysisToAnalysisDTO(analysis2);
 		} else {
-			throw new NotFoundException("you can't update unexist analysis");
+			throw new NotFoundException("Patient or sample or user not found");
 		}
-
 	}
 
 	@Override
-	@Transactional
+	public AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void addTestTypesToTestByAnalysis(Analysis a) {
+		// TODO Auto-generated method stub
 
 	}
+
+//	@Override
+//	@Transactional
+//	public List<Analysis> getAllAnalysisService() {
+//		return analysisRepository.findAll();
+//	}
+//
+//	@Override
+//	@Transactional
+//	public Optional<Analysis> getAnalysisByIdService(Long id) {
+//		return analysisRepository.findById(id);
+//	}
+//
+//	@Override
+//	@Transactional
+//	public Analysis addAnalysisService(Analysis a) {
+//		List<TestType> testTypes = testTypeServiceImpl.getAllTestTypesByAnalysis(a);
+//		for (TestType testType : testTypes) {
+//			Test test = new Test();
+//			test.setTestType(testType);
+//			test.setAnalysis(a);
+//			test.setStatus(TestStatus.WAITING);
+//			testServiceImpl.addTestService(test);
+//		}
+//		return analysisRepository.save(a);
+//	}
+//
+//	@Override
+//	@Transactional
+//	public Analysis updateAnalysisService(Analysis a) throws NotFoundException {
+//		if (analysisRepository.existsById(a.getId())) {
+//			return analysisRepository.save(a);
+//		} else {
+//			throw new NotFoundException("you can't update unexist analysis");
+//		}
+//
+//	}
+//
+//	@Override
+//	@Transactional
+//	public void addTestTypesToTestByAnalysis(Analysis a) {
+//
+//	}
 
 }
