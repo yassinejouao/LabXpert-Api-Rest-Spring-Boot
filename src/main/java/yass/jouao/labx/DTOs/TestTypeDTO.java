@@ -22,6 +22,6 @@ public class TestTypeDTO {
 	private Double max;
 	@JsonView({ viewTestType.class, saveTestType.class, updateTestType.class })
 	private Double min;
-	@JsonView({ viewTestType.class, saveTestType.class, updateTestType.class })
+	@JsonView({saveTestType.class})
 	private Long idAnalysisType;
 }

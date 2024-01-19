@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yass.jouao.labx.DTOs.AnalysisDTO;
+import yass.jouao.labx.DTOs.AnalysisTypeDTO;
+import yass.jouao.labx.DTOs.SampleDTO;
 import yass.jouao.labx.DTOs.TestTypeDTO;
-import yass.jouao.labx.entities.Analysis;
-import yass.jouao.labx.entities.TestType;
+import yass.jouao.labx.entities.*;
 import yass.jouao.labx.exeptions.NotFoundException;
+import yass.jouao.labx.repositories.IAnalysisRepository;
+import yass.jouao.labx.repositories.IAnalysisTypeRepository;
 import yass.jouao.labx.repositories.ITestTypeRepository;
 import yass.jouao.labx.serviceImpl.Mappers.TestTypeMapper;
 //import yass.jouao.labx.serviceImpl.Mappers.AnalysisMapper;
@@ -26,10 +29,20 @@ public class TestTypeServiceImpl implements ITestTypeService {
 	@Autowired
 	private ITestTypeRepository testTypeRepository;
 	@Autowired
+	private IAnalysisTypeRepository analysisTypeRepository;
+	@Autowired
 	private TestTypeMapper testTypeMapper;
-//	@Autowired
-//	private AnalysisMapper analysisMapper;
 
+	@Override
+	public TestTypeDTO getTestTypeDTOByIdService(Long id) throws NotFoundException {
+		Optional<TestType> optionalTestType = testTypeRepository.findById(id);
+		if (optionalTestType.isPresent()) {
+			TestTypeDTO testTypeDTO = testTypeMapper.fromTestTypeToTestTypeDTO(optionalTestType.get());
+			return testTypeDTO;
+		} else {
+			throw new NotFoundException("Patient not found");
+		}
+	}
 	@Override
 	@Transactional
 	public List<TestTypeDTO> getAllTestTypesService() {
@@ -42,11 +55,11 @@ public class TestTypeServiceImpl implements ITestTypeService {
 
 	@Override
 	@Transactional
-	public TestTypeDTO getTestTypeByIdService(Long id) throws NotFoundException {
+	public TestType getTestTypeByIdService(Long id) throws NotFoundException {
 		Optional<TestType> optionalTestType = testTypeRepository.findById(id);
 		if (optionalTestType.isPresent()) {
-			TestTypeDTO testTypeDTO = testTypeMapper.fromTestTypeToTestTypeDTO(optionalTestType.get());
-			return testTypeDTO;
+			TestType testType = optionalTestType.get();
+			return testType;
 		} else {
 			throw new NotFoundException("TestType not found");
 		}
@@ -54,23 +67,27 @@ public class TestTypeServiceImpl implements ITestTypeService {
 
 	@Override
 	@Transactional
-	public TestTypeDTO addTestTypeService(TestTypeDTO tt) {
-		TestType testTypeDto = testTypeMapper.fromTestTypeDTOToTestType(tt);
+	public TestTypeDTO addTestTypeService(TestTypeDTO tt)  throws NotFoundException {
 		TestType testType = testTypeMapper.fromTestTypeDTOToTestType(tt);
-
-		TestTypeDTO testTypeDTO = testTypeMapper.fromTestTypeToTestTypeDTO(testTypeRepository.save(testType));
-		return testTypeDTO;
+		Optional<AnalysisType> optionalAnalysisType = analysisTypeRepository.findById(tt.getIdAnalysisType());
+		if (optionalAnalysisType.isPresent()) {
+			testType.setAnalysisType(optionalAnalysisType.get());
+			return testTypeMapper.fromTestTypeToTestTypeDTO(testTypeRepository.save(testType));
+		} else {
+			throw new NotFoundException("AnalyseType not found");
+		}
 	}
 
 	@Override
 	@Transactional
 	public TestTypeDTO updateTestTypeService(Long id, TestTypeDTO tt) throws NotFoundException, IllegalAccessException {
-		TestType testTypeToUpdate = testTypeMapper.fromTestTypeDTOToTestType(getTestTypeByIdService(id));
+		TestType testTypeToUpdate = getTestTypeByIdService(id);
 		tt.setId(id);
 		TestType testTypeNewData = testTypeMapper.fromTestTypeDTOToTestType(tt);
 		updateNonNullFields(testTypeToUpdate, testTypeNewData);
+		Optional<AnalysisType> optionalAnalysisType = analysisTypeRepository.findById(testTypeToUpdate.getAnalysisType().getId());
+		testTypeToUpdate.setAnalysisType(optionalAnalysisType.get());
 		TestTypeDTO testTypeDTO = testTypeMapper.fromTestTypeToTestTypeDTO(testTypeRepository.save(testTypeToUpdate));
-		System.out.println("updated");
 		return testTypeDTO;
 	}
 	private void updateNonNullFields(TestType existingEntity, TestType updatedEntity) throws IllegalAccessException {

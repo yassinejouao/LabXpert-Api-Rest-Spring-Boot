@@ -40,7 +40,7 @@ public class TestTypeController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getTestTypeById(@PathVariable Long id) {
 		try {
-			TestTypeDTO testTypeDTO = testTypeService.getTestTypeByIdService(id);
+			TestTypeDTO testTypeDTO = testTypeService.getTestTypeDTOByIdService(id);
 			String json = objectMapper.writerWithView(TestTypeDTO.viewTestType.class).writeValueAsString(testTypeDTO);
 			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (NotFoundException e) {
@@ -54,8 +54,11 @@ public class TestTypeController {
 	public ResponseEntity<?> saveTestType(@RequestBody @JsonView(TestTypeDTO.saveTestType.class) TestTypeDTO testTypeDTO){
 		try {
 			testTypeDTO = testTypeService.addTestTypeService(testTypeDTO);
-			String json = objectMapper.writerWithView(TestTypeDTO.saveTestType.class).writeValueAsString(testTypeDTO);
+			String json = objectMapper.writerWithView(TestTypeDTO.viewTestType.class).writeValueAsString(testTypeDTO);
 			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
+		} catch (NotFoundException e) {
+			MessageErrorDTO errorResponse = new MessageErrorDTO(e.getMessage());
+			return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
 		}
