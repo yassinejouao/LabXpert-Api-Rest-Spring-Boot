@@ -3,20 +3,22 @@ package yass.jouao.labx.services;
 import java.util.List;
 import java.util.Optional;
 
+import yass.jouao.labx.DTOs.AnalysisDTO;
+import yass.jouao.labx.DTOs.TestTypeDTO;
 import yass.jouao.labx.entities.Analysis;
 import yass.jouao.labx.entities.TestType;
 import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface ITestTypeService {
-	List<TestType> getAllTestTypesService();
+	List<TestTypeDTO> getAllTestTypesService();
 
 	List<TestType> getAllTestTypesByAnalysis(Analysis a);
 
-	Optional<TestType> getTestTypeByIdService(Long id);
+	TestTypeDTO getTestTypeByIdService(Long id) throws NotFoundException;
 
-	TestType addTestTypeService(TestType tt);
+	TestTypeDTO addTestTypeService(TestTypeDTO tt);
 
-	TestType updateTestTypeService(TestType tt) throws NotFoundException;
+	TestTypeDTO updateTestTypeService(Long id, TestTypeDTO tt) throws NotFoundException, IllegalAccessException;
 
 	void deleteTestTypeService(Long id) throws NotFoundException;
 
