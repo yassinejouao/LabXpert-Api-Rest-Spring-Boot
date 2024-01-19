@@ -1,16 +1,15 @@
 package yass.jouao.labx.services;
 
-import java.util.Optional;
-
-import yass.jouao.labx.entities.AnalysisType;
+import yass.jouao.labx.DTOs.AnalysisTypeDTO;
 import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface IAnalysisTypeService {
-	Optional<AnalysisType> getAnalysisTypeByIdService(Long id);
+	AnalysisTypeDTO getAnalysisTypeByIdService(Long id) throws NotFoundException;
 
-	AnalysisType addAnalysisType(AnalysisType at);
+	AnalysisTypeDTO addAnalysisTypeService(AnalysisTypeDTO at);
 
-	AnalysisType updateAnalysisType(AnalysisType at) throws NotFoundException;
+	AnalysisTypeDTO updateAnalysisTypeService(Long Id, AnalysisTypeDTO at)
+			throws NotFoundException, IllegalAccessException;
 
-	void deleteAnalysisType(Long id) throws NotFoundException;
+	void deleteAnalysisTypeService(Long id) throws NotFoundException;
 }
