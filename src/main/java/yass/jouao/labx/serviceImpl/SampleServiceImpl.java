@@ -53,7 +53,7 @@ public class SampleServiceImpl implements ISampleService {
 	@Override
 	public SampleDTO addSampleService(SampleDTO s) throws NotFoundException {
 		Sample sample = sampleMapper.fromSampleDTOToSample(s);
-		Optional<Patient> optionalPatient = patientRepository.findById(s.getId());
+		Optional<Patient> optionalPatient = patientRepository.findById(s.getIdPatient());
 		if (optionalPatient.isPresent()) {
 			sample.setPatient(optionalPatient.get());
 			return sampleMapper.fromSampleToSampleDTO(sampleRepository.save(sample));
@@ -82,7 +82,7 @@ public class SampleServiceImpl implements ISampleService {
 		s.setId(id);
 		Sample sampleNewData = sampleMapper.fromSampleDTOToSample(s);
 		updateNonNullFields(sampleToUpdate, sampleNewData);
-		Optional<Patient> optionalPatient = patientRepository.findById(id);
+		Optional<Patient> optionalPatient = patientRepository.findById(sampleToUpdate.getPatient().getId());
 		sampleToUpdate.setPatient(optionalPatient.get());
 		SampleDTO sampleDTO = sampleMapper.fromSampleToSampleDTO(sampleRepository.save(sampleToUpdate));
 		return sampleDTO;

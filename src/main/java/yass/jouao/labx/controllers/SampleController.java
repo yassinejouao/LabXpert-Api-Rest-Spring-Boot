@@ -36,7 +36,7 @@ public class SampleController {
 		try {
 			SampleDTO sDTO = sampleServiceImpl.addSampleService(sampleDTO);
 			String json = objectMapper.writerWithView(SampleDTO.viewSample.class).writeValueAsString(sDTO);
-			return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (NotFoundException e) {
 			MessageErrorDTO errorResponse = new MessageErrorDTO(e.getMessage());
 			return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -49,7 +49,8 @@ public class SampleController {
 	public ResponseEntity<?> getSamplesByPatient(@PathVariable Long id) {
 		try {
 			List<SampleDTO> samples = sampleServiceImpl.getSamplesByIdPatient(id);
-			return new ResponseEntity<>(samples, HttpStatus.OK);
+			String json = objectMapper.writerWithView(SampleDTO.viewSample.class).writeValueAsString(samples);
+			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (NotFoundException e) {
 			MessageErrorDTO errorResponse = new MessageErrorDTO(e.getMessage());
 			return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
