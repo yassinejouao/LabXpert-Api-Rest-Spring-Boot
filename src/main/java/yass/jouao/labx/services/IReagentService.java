@@ -1,19 +1,19 @@
 package yass.jouao.labx.services;
 
 import java.util.List;
-import java.util.Optional;
 
+import yass.jouao.labx.DTOs.ReagentDTO;
 import yass.jouao.labx.entities.Reagent;
 import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface IReagentService {
-	List<Reagent> getAllReagentsService();
+	List<ReagentDTO> getAllReagentsService();
 
-	Optional<Reagent> getReagentByIdService(Long id);
+	Reagent getReagentByIdService(Long id)throws NotFoundException;
+	ReagentDTO getReagentDTOByIdService(Long id)throws NotFoundException;
+	List<ReagentDTO> getReagentsByIdFournisseur(Long id) throws NotFoundException;
+	ReagentDTO addReagentService(ReagentDTO r) throws NotFoundException ;
 
-	Reagent addReagentService(Reagent r);
-
-	Reagent updateReagentService(Reagent r) throws NotFoundException;
-
-	void deleteReagentService(Long id) throws NotFoundException;
+	ReagentDTO updateReagentService(Long id, ReagentDTO r) throws NotFoundException,IllegalAccessException;
+	//void softDeleteReagentService(Long id) throws NotFoundException;
 }
