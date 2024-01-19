@@ -12,7 +12,7 @@ public interface IPatientService {
 
 	PatientDTO addPatientService(PatientDTO p) throws NotFoundException;
 
-	PatientDTO updatePatientService(PatientDTO p) throws NotFoundException, IllegalAccessException;
+	PatientDTO updatePatientService(Long patientId, PatientDTO p) throws NotFoundException, IllegalAccessException;
 
 	void deletePatientService(Long id) throws NotFoundException;
 }

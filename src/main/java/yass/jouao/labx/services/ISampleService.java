@@ -1,15 +1,20 @@
 package yass.jouao.labx.services;
 
-import java.util.Optional;
+import java.util.List;
 
+import yass.jouao.labx.DTOs.SampleDTO;
 import yass.jouao.labx.entities.Sample;
 import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface ISampleService {
-	Optional<Sample> getSampleByIdService(Long id);
+	SampleDTO getSampleDTOByIdService(Long id) throws NotFoundException;
 
-	Sample addSampleService(Sample s);
+	SampleDTO addSampleService(SampleDTO s) throws NotFoundException;
 
-	Sample updateSampleService(Sample s) throws NotFoundException;
+	List<SampleDTO> getSamplesByIdPatient(Long id) throws NotFoundException;
+
+	Sample getSampleByIdService(Long id) throws NotFoundException;
+
+	SampleDTO updateSampleService(Long id, SampleDTO s) throws NotFoundException, IllegalAccessException;
 
 }

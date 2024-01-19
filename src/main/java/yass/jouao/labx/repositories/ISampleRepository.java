@@ -7,5 +7,4 @@ import yass.jouao.labx.entities.Sample;
 
 @Repository
 public interface ISampleRepository extends JpaRepository<Sample, Long> {
-
 }
