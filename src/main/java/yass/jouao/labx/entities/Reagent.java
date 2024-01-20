@@ -28,7 +28,7 @@ public class Reagent {
 	private String name;
 	private String description;
 	@Column(nullable = false)
-	private long stock;
+	private Long stock;
 	@Column(nullable = false)
 	private Double price;
 	@Column(nullable = false)

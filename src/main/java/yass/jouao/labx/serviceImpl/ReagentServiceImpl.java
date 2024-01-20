@@ -12,14 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yass.jouao.labx.DTOs.ReagentDTO;
-import yass.jouao.labx.DTOs.SampleDTO;
-import yass.jouao.labx.DTOs.TestTypeDTO;
-import yass.jouao.labx.entities.*;
+import yass.jouao.labx.entities.Fournisseur;
+import yass.jouao.labx.entities.Reagent;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IFournisseurRepository;
 import yass.jouao.labx.repositories.IReagentRepository;
 import yass.jouao.labx.serviceImpl.Mappers.ReagentMapper;
-import yass.jouao.labx.services.IFournisseurService;
 import yass.jouao.labx.services.IReagentService;
 
 @Service
@@ -36,10 +34,10 @@ public class ReagentServiceImpl implements IReagentService {
 	@Transactional
 	public List<ReagentDTO> getAllReagentsService() {
 		List<Reagent> reagents = reagentRepository.findAll();
-		List<ReagentDTO> reagentDTOs = reagents.stream()
-				.map(reagent -> reagentMapper.fromReagentToReagentDTO(reagent))
+		List<ReagentDTO> reagentDTOs = reagents.stream().map(reagent -> reagentMapper.fromReagentToReagentDTO(reagent))
 				.collect(Collectors.toList());
-		return reagentDTOs;	}
+		return reagentDTOs;
+	}
 
 	@Override
 	public ReagentDTO getReagentDTOByIdService(Long id) throws NotFoundException {
@@ -57,8 +55,8 @@ public class ReagentServiceImpl implements IReagentService {
 		Optional<Fournisseur> optionalFournisseur = fournisseurRepository.findById(id);
 		if (optionalFournisseur.isPresent()) {
 			Collection<Reagent> reagents = optionalFournisseur.get().getReagents();
-			List<ReagentDTO> reagentDTOs = reagents.stream().map(reagent -> reagentMapper.fromReagentToReagentDTO(reagent))
-					.collect(Collectors.toList());
+			List<ReagentDTO> reagentDTOs = reagents.stream()
+					.map(reagent -> reagentMapper.fromReagentToReagentDTO(reagent)).collect(Collectors.toList());
 			return reagentDTOs;
 		} else {
 			throw new NotFoundException("Fournisseur not found");
@@ -67,7 +65,7 @@ public class ReagentServiceImpl implements IReagentService {
 
 	@Override
 	@Transactional
-	public Reagent getReagentByIdService(Long id)  throws NotFoundException {
+	public Reagent getReagentByIdService(Long id) throws NotFoundException {
 		Optional<Reagent> optionalReagent = reagentRepository.findById(id);
 		if (optionalReagent.isPresent()) {
 			Reagent reagent = optionalReagent.get();
@@ -95,13 +93,21 @@ public class ReagentServiceImpl implements IReagentService {
 	public ReagentDTO updateReagentService(Long id, ReagentDTO r) throws NotFoundException, IllegalAccessException {
 		Reagent reagentToUpdate = getReagentByIdService(id);
 		r.setId(id);
+		System.out.println(reagentToUpdate.getPrice());
+		System.out.println(r.getPrice());
+		System.out.println(reagentToUpdate.getStock());
+		System.out.println(r.getStock());
 		Reagent reagentNewData = reagentMapper.fromReagentDTOToReagent(r);
+		System.out.println(reagentToUpdate.getPrice());
+		System.out.println(reagentNewData.getPrice());
 		updateNonNullFields(reagentToUpdate, reagentNewData);
-		Optional<Fournisseur> optionalFournisseur = fournisseurRepository.findById(reagentToUpdate.getFournisseur().getId());
+		Optional<Fournisseur> optionalFournisseur = fournisseurRepository
+				.findById(reagentToUpdate.getFournisseur().getId());
 		reagentToUpdate.setFournisseur(optionalFournisseur.get());
 		ReagentDTO reagentDTO = reagentMapper.fromReagentToReagentDTO(reagentRepository.save(reagentToUpdate));
 		return reagentDTO;
 	}
+
 	private void updateNonNullFields(Reagent existingEntity, Reagent updatedEntity) throws IllegalAccessException {
 		Field[] fields = Reagent.class.getDeclaredFields();
 		for (Field field : fields) {

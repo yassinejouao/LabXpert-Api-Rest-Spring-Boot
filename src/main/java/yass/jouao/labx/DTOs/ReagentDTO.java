@@ -1,9 +1,9 @@
 package yass.jouao.labx.DTOs;
 
 import java.time.LocalDate;
-import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonView;
+
 import lombok.Data;
 
 @Data
@@ -16,6 +16,7 @@ public class ReagentDTO {
 
 	public interface updateReagent {
 	}
+
 	@JsonView({ saveReagent.class, updateReagent.class })
 	private long id;
 	@JsonView({ saveReagent.class, viewReagent.class, updateReagent.class })
@@ -25,9 +26,9 @@ public class ReagentDTO {
 	@JsonView({ saveReagent.class, viewReagent.class, updateReagent.class })
 	private Long stock;
 	@JsonView({ saveReagent.class, viewReagent.class, updateReagent.class })
-	private double price;
+	private Double price;
 	@JsonView({ saveReagent.class, viewReagent.class, updateReagent.class })
 	private LocalDate expirationDate;
-	@JsonView({ saveReagent.class})
+	@JsonView({ saveReagent.class })
 	private Long idFournisseur;
 }
