@@ -2,6 +2,7 @@ package yass.jouao.labx.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import yass.jouao.labx.entities.Sample;
 import yass.jouao.labx.entities.Test;
 import yass.jouao.labx.entities.TestType;
 import yass.jouao.labx.entities.UserLab;
+import yass.jouao.labx.enums.AnalysisStatus;
 import yass.jouao.labx.enums.ResultTest;
 import yass.jouao.labx.enums.TestStatus;
 import yass.jouao.labx.exeptions.NotFoundException;
@@ -24,6 +26,7 @@ import yass.jouao.labx.repositories.ISampleRepository;
 import yass.jouao.labx.repositories.ITestRepository;
 import yass.jouao.labx.repositories.IUserLabRepository;
 import yass.jouao.labx.serviceImpl.Mappers.AnalysisMapper;
+import yass.jouao.labx.serviceImpl.Mappers.PatientMapper;
 import yass.jouao.labx.services.IAnalysisService;
 
 @Service
@@ -31,6 +34,8 @@ public class AnalysisImpl implements IAnalysisService {
 
 	@Autowired
 	private AnalysisMapper analysisMapper;
+	@Autowired
+	private PatientMapper patientMapper;
 	@Autowired
 	private TestTypeServiceImpl testTypeServiceImpl;
 	@Autowired
@@ -50,6 +55,32 @@ public class AnalysisImpl implements IAnalysisService {
 	public List<AnalysisDTO> getAllAnalysisService() throws NotFoundException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<AnalysisDTO> getAllAnalysisInProgress() throws NotFoundException {
+		List<Analysis> analysisInProgress = analysisRepository.findByStatusIn(AnalysisStatus.ANALYZING,
+				AnalysisStatus.WAITING);
+		List<AnalysisDTO> analysisDTOs = analysisInProgress.stream().map(aIProgress -> {
+			Patient patient = aIProgress.getPatient();
+			AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(aIProgress);
+			analysisDTO.setPatientDTO(patientMapper.fromPatientToPatientDTO(patient));
+			return analysisDTO;
+
+		}).collect(Collectors.toList());
+		return analysisDTOs;
+	}
+
+	@Override
+	public List<AnalysisDTO> getAnalysisByIdPatientService(Long id) throws NotFoundException {
+		Optional<Patient> patient = patientRepository.findById(id);
+		if (patient.isPresent()) {
+			List<AnalysisDTO> analysisDTOs = analysisRepository.findAllByPatient(patient.get()).stream()
+					.map(a -> analysisMapper.fromAnalysisToAnalysisDTO(a)).collect(Collectors.toList());
+			return analysisDTOs;
+		} else {
+			throw new NotFoundException("not found patient");
+		}
 	}
 
 	@Override
@@ -102,12 +133,6 @@ public class AnalysisImpl implements IAnalysisService {
 	public AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void addTestTypesToTestByAnalysis(Analysis a) {
-		// TODO Auto-generated method stub
-
 	}
 
 //	@Override

@@ -1,5 +1,6 @@
 package yass.jouao.labx.DTOs;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -8,7 +9,12 @@ import lombok.Data;
 import yass.jouao.labx.enums.AnalysisStatus;
 
 @Data
-public class AnalysisDTO {
+public class AnalysisDTO implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public interface saveAnalysis {
 	}
 
@@ -28,6 +34,8 @@ public class AnalysisDTO {
 	private Boolean resultAnalysis;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
 	private AnalysisStatus status;
+	@JsonView({ viewAnalysis.class })
+	private PatientDTO patientDTO;
 	// USE ONLY IN ADD
 	@JsonView({ saveAnalysis.class })
 	private Long IdSample;

@@ -1,8 +1,12 @@
 package yass.jouao.labx.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +38,27 @@ public class AnalysisController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("inprogress")
+	public ResponseEntity<?> getAllInProgressAnalysis() {
+		try {
+			List<AnalysisDTO> aDTO = analysisImpl.getAllAnalysisInProgress();
+			String json = objectMapper.writerWithView(AnalysisDTO.viewAnalysis.class).writeValueAsString(aDTO);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("patient/{patientId}")
+	public ResponseEntity<String> getAllAnalysisByPatient(@PathVariable Long patientId) {
+		try {
+			List<AnalysisDTO> aDTO = analysisImpl.getAnalysisByIdPatientService(patientId);
+			String json = objectMapper.writerWithView(AnalysisDTO.viewAnalysis.class).writeValueAsString(aDTO);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

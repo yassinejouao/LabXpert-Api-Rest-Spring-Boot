@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import yass.jouao.labx.entities.Analysis;
 import yass.jouao.labx.entities.Patient;
+import yass.jouao.labx.enums.AnalysisStatus;
 
 @Repository
 public interface IAnalysisRepository extends JpaRepository<Analysis, Long> {
 
 	List<Analysis> findAllByPatient(Patient patient);
+
+	List<Analysis> findByStatusIn(AnalysisStatus... status);
 }

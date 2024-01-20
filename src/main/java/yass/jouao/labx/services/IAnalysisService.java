@@ -7,15 +7,18 @@ import yass.jouao.labx.entities.Analysis;
 import yass.jouao.labx.exeptions.NotFoundException;
 
 public interface IAnalysisService {
-	List<AnalysisDTO> getAllAnalysisService() throws NotFoundException;;
+	List<AnalysisDTO> getAllAnalysisService() throws NotFoundException;
 
-	AnalysisDTO getAnalysisDTOByIdService(Long id) throws NotFoundException;;
+	List<AnalysisDTO> getAllAnalysisInProgress() throws NotFoundException;
 
-	Analysis getAnalysisByIdService(Long id) throws NotFoundException;;
+	AnalysisDTO getAnalysisDTOByIdService(Long id) throws NotFoundException;
 
-	AnalysisDTO addAnalysisService(AnalysisDTO a) throws NotFoundException;;
+	Analysis getAnalysisByIdService(Long id) throws NotFoundException;
 
-	AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException;;
+	List<AnalysisDTO> getAnalysisByIdPatientService(Long id) throws NotFoundException;
 
-	void addTestTypesToTestByAnalysis(Analysis a);
+	AnalysisDTO addAnalysisService(AnalysisDTO a) throws NotFoundException;
+
+	AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException;
+
 }
