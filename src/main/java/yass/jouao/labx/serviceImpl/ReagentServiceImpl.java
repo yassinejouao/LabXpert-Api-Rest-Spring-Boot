@@ -93,13 +93,7 @@ public class ReagentServiceImpl implements IReagentService {
 	public ReagentDTO updateReagentService(Long id, ReagentDTO r) throws NotFoundException, IllegalAccessException {
 		Reagent reagentToUpdate = getReagentByIdService(id);
 		r.setId(id);
-		System.out.println(reagentToUpdate.getPrice());
-		System.out.println(r.getPrice());
-		System.out.println(reagentToUpdate.getStock());
-		System.out.println(r.getStock());
 		Reagent reagentNewData = reagentMapper.fromReagentDTOToReagent(r);
-		System.out.println(reagentToUpdate.getPrice());
-		System.out.println(reagentNewData.getPrice());
 		updateNonNullFields(reagentToUpdate, reagentNewData);
 		Optional<Fournisseur> optionalFournisseur = fournisseurRepository
 				.findById(reagentToUpdate.getFournisseur().getId());

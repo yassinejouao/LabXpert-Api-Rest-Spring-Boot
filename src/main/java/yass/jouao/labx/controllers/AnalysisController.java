@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import yass.jouao.labx.DTOs.AnalysisDTO;
+import yass.jouao.labx.DTOs.AnalysisResultDTO;
+import yass.jouao.labx.DTOs.DataRapportDTO;
 import yass.jouao.labx.serviceImpl.AnalysisImpl;
 
 @RestController
@@ -55,6 +57,30 @@ public class AnalysisController {
 		try {
 			List<AnalysisDTO> aDTO = analysisImpl.getAnalysisByIdPatientService(patientId);
 			String json = objectMapper.writerWithView(AnalysisDTO.viewAnalysis.class).writeValueAsString(aDTO);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("result/{Id}")
+	public ResponseEntity<String> getAnalysisResult(@PathVariable Long Id) {
+		try {
+			AnalysisDTO aDTO = analysisImpl.getResultByAnalysisId(Id);
+			String json = objectMapper.writerWithView(AnalysisDTO.result.class).writeValueAsString(aDTO);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("rapport")
+	public ResponseEntity<String> getAnalysisRapport(@RequestBody DataRapportDTO dataRapport) {
+		try {
+
+			List<AnalysisResultDTO> aDTO = analysisImpl.getAnalysisRapport(dataRapport.getAnalysisTypeId(),
+					dataRapport.getStartDate(), dataRapport.getEndDate(), dataRapport.getIntervalRapport());
+			String json = objectMapper.writeValueAsString(aDTO);
 			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

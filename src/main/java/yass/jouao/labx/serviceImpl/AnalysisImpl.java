@@ -1,6 +1,11 @@
 package yass.jouao.labx.serviceImpl;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -8,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yass.jouao.labx.DTOs.AnalysisDTO;
+import yass.jouao.labx.DTOs.AnalysisResultDTO;
+import yass.jouao.labx.DTOs.TestDTO;
 import yass.jouao.labx.entities.Analysis;
 import yass.jouao.labx.entities.AnalysisType;
 import yass.jouao.labx.entities.Patient;
@@ -16,6 +23,7 @@ import yass.jouao.labx.entities.Test;
 import yass.jouao.labx.entities.TestType;
 import yass.jouao.labx.entities.UserLab;
 import yass.jouao.labx.enums.AnalysisStatus;
+import yass.jouao.labx.enums.IntervalRapport;
 import yass.jouao.labx.enums.ResultTest;
 import yass.jouao.labx.enums.TestStatus;
 import yass.jouao.labx.exeptions.NotFoundException;
@@ -27,6 +35,7 @@ import yass.jouao.labx.repositories.ITestRepository;
 import yass.jouao.labx.repositories.IUserLabRepository;
 import yass.jouao.labx.serviceImpl.Mappers.AnalysisMapper;
 import yass.jouao.labx.serviceImpl.Mappers.PatientMapper;
+import yass.jouao.labx.serviceImpl.Mappers.TestMapper;
 import yass.jouao.labx.services.IAnalysisService;
 
 @Service
@@ -36,6 +45,8 @@ public class AnalysisImpl implements IAnalysisService {
 	private AnalysisMapper analysisMapper;
 	@Autowired
 	private PatientMapper patientMapper;
+	@Autowired
+	private TestMapper testMapper;
 	@Autowired
 	private TestTypeServiceImpl testTypeServiceImpl;
 	@Autowired
@@ -69,6 +80,26 @@ public class AnalysisImpl implements IAnalysisService {
 
 		}).collect(Collectors.toList());
 		return analysisDTOs;
+	}
+
+	@Override
+	public AnalysisDTO getResultByAnalysisId(Long id) throws NotFoundException {
+		Optional<Analysis> analysisOptional = analysisRepository.findById(id);
+		if (analysisOptional.isPresent()) {
+			if (analysisOptional.get().getStatus() == AnalysisStatus.FINISHED) {
+				AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(analysisOptional.get());
+				Collection<Test> tests = analysisOptional.get().getTests();
+				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
+						.collect(Collectors.toList());
+				analysisDTO.setTestsDTO(testDTOs);
+				return analysisDTO;
+			} else {
+				throw new NotFoundException("analysis not finished yet!");
+			}
+		} else {
+			throw new NotFoundException("not found analysis");
+		}
+
 	}
 
 	@Override
@@ -130,52 +161,54 @@ public class AnalysisImpl implements IAnalysisService {
 	}
 
 	@Override
+	public List<AnalysisResultDTO> getAnalysisRapport(Long analysisTypeId, LocalDateTime startDate,
+			LocalDateTime endDate, IntervalRapport interfRapport) {
+		Optional<AnalysisType> analysisType = analysisTypeRepository.findById(analysisTypeId);
+		List<Analysis> analyses = analysisRepository.findByAnalysisTypeAndStartDateBetween(analysisType.get(),
+				startDate, endDate);
+		switch (interfRapport) {
+		case DAY:
+			return groupByDay(analyses);
+		case WEEK:
+			return groupByWeek(analyses);
+		case MONTH:
+			return groupByMonth(analyses);
+		default:
+			throw new IllegalArgumentException("Interval not found");
+		}
+	}
+
+	private List<AnalysisResultDTO> groupByDay(List<Analysis> analyses) {
+		Map<LocalDate, Long> groupedByDay = analyses.stream().collect(
+				Collectors.groupingBy(analysis -> analysis.getStartDate().toLocalDate(), Collectors.counting()));
+
+		return convertToResultFunction(groupedByDay);
+	}
+
+	private List<AnalysisResultDTO> groupByMonth(List<Analysis> analyses) {
+		Map<LocalDate, Long> groupedByMonth = analyses.stream().collect(Collectors.groupingBy(
+				analysis -> analysis.getStartDate().toLocalDate().withDayOfMonth(1), Collectors.counting()));
+
+		return convertToResultFunction(groupedByMonth);
+	}
+
+	private List<AnalysisResultDTO> groupByWeek(List<Analysis> analyses) {
+		Map<LocalDate, Long> groupedByMonth = analyses.stream().collect(Collectors.groupingBy(
+				analysis -> analysis.getStartDate().toLocalDate().with(DayOfWeek.MONDAY), Collectors.counting()));
+
+		return convertToResultFunction(groupedByMonth);
+	}
+
+	private List<AnalysisResultDTO> convertToResultFunction(Map<LocalDate, Long> groupedData) {
+		return groupedData.entrySet().stream()
+				.map(entry -> new AnalysisResultDTO(entry.getKey(), entry.getValue().intValue()))
+				.collect(Collectors.toList());
+	}
+
+	@Override
 	public AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-//	@Override
-//	@Transactional
-//	public List<Analysis> getAllAnalysisService() {
-//		return analysisRepository.findAll();
-//	}
-//
-//	@Override
-//	@Transactional
-//	public Optional<Analysis> getAnalysisByIdService(Long id) {
-//		return analysisRepository.findById(id);
-//	}
-//
-//	@Override
-//	@Transactional
-//	public Analysis addAnalysisService(Analysis a) {
-//		List<TestType> testTypes = testTypeServiceImpl.getAllTestTypesByAnalysis(a);
-//		for (TestType testType : testTypes) {
-//			Test test = new Test();
-//			test.setTestType(testType);
-//			test.setAnalysis(a);
-//			test.setStatus(TestStatus.WAITING);
-//			testServiceImpl.addTestService(test);
-//		}
-//		return analysisRepository.save(a);
-//	}
-//
-//	@Override
-//	@Transactional
-//	public Analysis updateAnalysisService(Analysis a) throws NotFoundException {
-//		if (analysisRepository.existsById(a.getId())) {
-//			return analysisRepository.save(a);
-//		} else {
-//			throw new NotFoundException("you can't update unexist analysis");
-//		}
-//
-//	}
-//
-//	@Override
-//	@Transactional
-//	public void addTestTypesToTestByAnalysis(Analysis a) {
-//
-//	}
 
 }

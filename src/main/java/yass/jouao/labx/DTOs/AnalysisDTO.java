@@ -2,6 +2,7 @@ package yass.jouao.labx.DTOs;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -24,18 +25,23 @@ public class AnalysisDTO implements Serializable {
 	public interface updateAnalysis {
 	}
 
-	@JsonView({ viewAnalysis.class })
+	public interface result {
+	}
+
+	@JsonView({ viewAnalysis.class, result.class })
 	private long id;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
 	private LocalDateTime startDate;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
 	private LocalDateTime endDate;
-	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
+	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class, result.class })
 	private Boolean resultAnalysis;
-	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
+	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class, result.class })
 	private AnalysisStatus status;
 	@JsonView({ viewAnalysis.class })
 	private PatientDTO patientDTO;
+	@JsonView({ result.class })
+	private List<TestDTO> testsDTO;
 	// USE ONLY IN ADD
 	@JsonView({ saveAnalysis.class })
 	private Long IdSample;

@@ -13,6 +13,9 @@ public interface ITestService {
 
 	Test addTestService(Test t);
 
-	Test updateTestService(Test t) throws NotFoundException;
+	boolean updateResultTest(Long idTest, Double result) throws NotFoundException;
+
+	boolean addReagentToTest(Long idTest, Long idReagent, Long quantity)
+			throws NotFoundException, IllegalAccessException;
 
 }
