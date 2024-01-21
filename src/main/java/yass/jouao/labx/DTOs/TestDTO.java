@@ -9,6 +9,7 @@ import yass.jouao.labx.enums.TestStatus;
 
 @Data
 public class TestDTO {
+
 	private long id;
 	@JsonView({ result.class })
 	private Double resultTest;
@@ -16,4 +17,5 @@ public class TestDTO {
 	private ResultTest result;
 	@JsonView({ result.class })
 	private TestStatus status;
+
 }

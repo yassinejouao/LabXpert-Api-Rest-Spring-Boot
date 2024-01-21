@@ -22,7 +22,6 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Autowired
 	private PatientMapper patientMapper;
-
 	@Autowired
 	private IPatientRepository patientRepository;
 
@@ -77,7 +76,7 @@ public class PatientServiceImpl implements IPatientService {
 		return patientDTO;
 	}
 
-	private void updateNonNullFields(Patient existingEntity, Patient updatedEntity) throws IllegalAccessException {
+	public void updateNonNullFields(Patient existingEntity, Patient updatedEntity) throws IllegalAccessException {
 		Field[] fields = Patient.class.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);

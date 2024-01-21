@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnalysisResultDTO {
+
 	private LocalDate groupedDate;
 	private int analysisCount;
+
 }

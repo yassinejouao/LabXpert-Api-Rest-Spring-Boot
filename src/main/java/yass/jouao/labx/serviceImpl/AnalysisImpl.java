@@ -1,5 +1,6 @@
 package yass.jouao.labx.serviceImpl;
 
+import java.lang.reflect.Field;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,12 +64,6 @@ public class AnalysisImpl implements IAnalysisService {
 	private ITestRepository testRepository;
 
 	@Override
-	public List<AnalysisDTO> getAllAnalysisService() throws NotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<AnalysisDTO> getAllAnalysisInProgress() throws NotFoundException {
 		List<Analysis> analysisInProgress = analysisRepository.findByStatusIn(AnalysisStatus.ANALYZING,
 				AnalysisStatus.WAITING);
@@ -112,18 +107,6 @@ public class AnalysisImpl implements IAnalysisService {
 		} else {
 			throw new NotFoundException("not found patient");
 		}
-	}
-
-	@Override
-	public AnalysisDTO getAnalysisDTOByIdService(Long id) throws NotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Analysis getAnalysisByIdService(Long id) throws NotFoundException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -207,8 +190,29 @@ public class AnalysisImpl implements IAnalysisService {
 
 	@Override
 	public AnalysisDTO updateAnalysisService(AnalysisDTO a) throws NotFoundException, IllegalAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Analysis> analysisToUpdate = analysisRepository.findById(a.getId());
+		analysisToUpdate.ifPresent(analysis -> {
+			analysis.getSample();
+			analysis.getPatient();
+			analysis.getAnalysisType();
+			analysis.getUser();
+		});
+		Analysis analysisNewData = analysisMapper.fromAnalysisDTOToAnalysis(a);
+		updateNonNullFields(analysisToUpdate.get(), analysisNewData);
+		AnalysisDTO analysisDTO = analysisMapper
+				.fromAnalysisToAnalysisDTO(analysisRepository.save(analysisToUpdate.get()));
+		return analysisDTO;
+	}
+
+	private void updateNonNullFields(Analysis existingEntity, Analysis updatedEntity) throws IllegalAccessException {
+		Field[] fields = Analysis.class.getDeclaredFields();
+		for (Field field : fields) {
+			field.setAccessible(true);
+			Object updatedValue = field.get(updatedEntity);
+			if (updatedValue != null) {
+				field.set(existingEntity, updatedValue);
+			}
+		}
 	}
 
 }

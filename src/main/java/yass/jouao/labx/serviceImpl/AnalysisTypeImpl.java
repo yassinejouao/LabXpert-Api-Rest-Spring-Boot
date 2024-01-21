@@ -28,7 +28,7 @@ public class AnalysisTypeImpl implements IAnalysisTypeService {
 			AnalysisTypeDTO analysisTypeDTO = analysisTypeMapper.fromAnalysisTypeToAnalysisTypeDTO(optional.get());
 			return analysisTypeDTO;
 		} else {
-			throw new NotFoundException("Patient not found");
+			throw new NotFoundException("Analysis not found");
 		}
 
 	}
@@ -59,7 +59,7 @@ public class AnalysisTypeImpl implements IAnalysisTypeService {
 		if (analysisTypeRepository.existsById(id)) {
 			analysisTypeRepository.deleteById(id);
 		} else {
-			throw new NotFoundException("Patient not found");
+			throw new NotFoundException("Analysis not found");
 		}
 
 	}
@@ -75,37 +75,5 @@ public class AnalysisTypeImpl implements IAnalysisTypeService {
 			}
 		}
 	}
-
-//	@Override
-//	@Transactional
-//	public Optional<AnalysisType> getAnalysisTypeByIdService(Long id) {
-//		return analysisTypeRepository.findById(id);
-//	}
-//
-//	@Override
-//	@Transactional
-//	public AnalysisType addAnalysisType(AnalysisType at) {
-//		return analysisTypeRepository.save(at);
-//	}
-//
-//	@Override
-//	@Transactional
-//	public AnalysisType updateAnalysisType(AnalysisType at) throws NotFoundException {
-//		if (analysisTypeRepository.existsById(at.getId())) {
-//			return analysisTypeRepository.save(at);
-//		} else {
-//			throw new NotFoundException("you can't update unexist analysis");
-//		}
-//	}
-//
-//	@Override
-//	@Transactional
-//	public void deleteAnalysisType(Long id) throws NotFoundException {
-//		if (analysisTypeRepository.existsById(id)) {
-//			analysisTypeRepository.deleteById(id);
-//		} else {
-//			throw new NotFoundException("Analysis Type not found");
-//		}
-//	}
 
 }

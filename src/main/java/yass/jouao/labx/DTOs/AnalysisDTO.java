@@ -6,14 +6,17 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import yass.jouao.labx.enums.AnalysisStatus;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AnalysisDTO implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public interface saveAnalysis {
@@ -28,7 +31,7 @@ public class AnalysisDTO implements Serializable {
 	public interface result {
 	}
 
-	@JsonView({ viewAnalysis.class, result.class })
+	@JsonView({ viewAnalysis.class, result.class, updateAnalysis.class })
 	private long id;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
 	private LocalDateTime startDate;

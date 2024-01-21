@@ -7,14 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yass.jouao.labx.DTOs.FournisseurDTO;
-import yass.jouao.labx.DTOs.PatientDTO;
 import yass.jouao.labx.entities.Fournisseur;
-import yass.jouao.labx.entities.Patient;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IFournisseurRepository;
 import yass.jouao.labx.serviceImpl.Mappers.FournisseurMapper;
@@ -27,7 +24,6 @@ public class FournisseurServiceImpl implements IFournisseurService {
 	private IFournisseurRepository fournisseurRepository;
 	@Autowired
 	private FournisseurMapper fournisseurMapper;
-
 
 	@Override
 	@Transactional
@@ -44,7 +40,8 @@ public class FournisseurServiceImpl implements IFournisseurService {
 	public FournisseurDTO getFournisseurByIdService(Long id) throws NotFoundException {
 		Optional<Fournisseur> optionalFournisseur = fournisseurRepository.findById(id);
 		if (optionalFournisseur.isPresent()) {
-			FournisseurDTO fournisseurDTO = fournisseurMapper.fromFournisseurToFournisseurDTO(optionalFournisseur.get());
+			FournisseurDTO fournisseurDTO = fournisseurMapper
+					.fromFournisseurToFournisseurDTO(optionalFournisseur.get());
 			return fournisseurDTO;
 		} else {
 			throw new NotFoundException("Fournisseur not found");
@@ -55,23 +52,28 @@ public class FournisseurServiceImpl implements IFournisseurService {
 	@Transactional
 	public FournisseurDTO addFournisseurService(FournisseurDTO f) {
 		Fournisseur fournisseur = fournisseurMapper.fromFournisseurDTOToFournisseur(f);
-		FournisseurDTO fournisseurDTO = fournisseurMapper.fromFournisseurToFournisseurDTO(fournisseurRepository.save(fournisseur));
+		FournisseurDTO fournisseurDTO = fournisseurMapper
+				.fromFournisseurToFournisseurDTO(fournisseurRepository.save(fournisseur));
 		return fournisseurDTO;
 
 	}
 
 	@Override
 	@Transactional
-	public FournisseurDTO updateFournisseurService(Long id, FournisseurDTO f) throws NotFoundException, IllegalAccessException {
-		Fournisseur fournisseurToUpdate = fournisseurMapper.fromFournisseurDTOToFournisseur(getFournisseurByIdService(id));
+	public FournisseurDTO updateFournisseurService(Long id, FournisseurDTO f)
+			throws NotFoundException, IllegalAccessException {
+		Fournisseur fournisseurToUpdate = fournisseurMapper
+				.fromFournisseurDTOToFournisseur(getFournisseurByIdService(id));
 		f.setId(id);
 		Fournisseur fournisseurNewData = fournisseurMapper.fromFournisseurDTOToFournisseur(f);
 		updateNonNullFields(fournisseurToUpdate, fournisseurNewData);
-		FournisseurDTO fournisseurDTO = fournisseurMapper.fromFournisseurToFournisseurDTO(fournisseurRepository.save(fournisseurToUpdate));
-		System.out.println("updated");
+		FournisseurDTO fournisseurDTO = fournisseurMapper
+				.fromFournisseurToFournisseurDTO(fournisseurRepository.save(fournisseurToUpdate));
 		return fournisseurDTO;
 	}
-	private void updateNonNullFields(Fournisseur existingEntity, Fournisseur updatedEntity) throws IllegalAccessException {
+
+	private void updateNonNullFields(Fournisseur existingEntity, Fournisseur updatedEntity)
+			throws IllegalAccessException {
 		Field[] fields = Fournisseur.class.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);
@@ -81,6 +83,7 @@ public class FournisseurServiceImpl implements IFournisseurService {
 			}
 		}
 	}
+
 	@Override
 	@Transactional
 	public void deleteFournisseurService(Long id) throws NotFoundException {

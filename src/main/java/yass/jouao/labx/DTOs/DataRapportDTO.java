@@ -7,6 +7,7 @@ import yass.jouao.labx.enums.IntervalRapport;
 
 @Data
 public class DataRapportDTO {
+
 	private Long analysisTypeId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;

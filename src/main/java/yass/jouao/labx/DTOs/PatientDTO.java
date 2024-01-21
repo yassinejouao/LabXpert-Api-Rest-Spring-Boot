@@ -6,15 +6,19 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO.viewAnalysis;
 import yass.jouao.labx.enums.Sex;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PatientDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public interface viewPatient {
 	}

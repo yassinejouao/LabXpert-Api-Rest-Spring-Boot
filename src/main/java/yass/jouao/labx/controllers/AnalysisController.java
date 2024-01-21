@@ -87,4 +87,16 @@ public class AnalysisController {
 		}
 	}
 
+	@PostMapping("update")
+	public ResponseEntity<String> updateAnalysis(
+			@RequestBody @JsonView(AnalysisDTO.updateAnalysis.class) AnalysisDTO analysisDTO) {
+		try {
+			analysisDTO = analysisImpl.updateAnalysisService(analysisDTO);
+			String json = objectMapper.writeValueAsString("Updated Successfully");
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

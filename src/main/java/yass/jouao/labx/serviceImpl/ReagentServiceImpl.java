@@ -112,15 +112,5 @@ public class ReagentServiceImpl implements IReagentService {
 			}
 		}
 	}
-//	@Override
-//	public void softDeleteReagentService(Long id) throws NotFoundException{
-//		Optional<Reagent> optionalReagent = reagentRepository.findById(id);
-//		if (optionalReagent.isPresent()) {
-//			ReagentDTO reagentDTO = reagentMapper.fromReagentToReagentDTO(optionalReagent.get());
-//			//statu not exist
-//			reagentDTO.setStatu();
-//		}else {
-//			throw new NotFoundException("Reagent not found");
-//		}
-//	}
+
 }
