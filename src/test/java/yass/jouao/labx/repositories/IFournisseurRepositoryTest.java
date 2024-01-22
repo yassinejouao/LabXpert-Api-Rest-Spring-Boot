@@ -1,5 +1,6 @@
 package yass.jouao.labx.repositories;
 
+import org.assertj.core.internal.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import yass.jouao.labx.entities.Fournisseur;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,5 +59,25 @@ class IFournisseurRepositoryTest {
         //Assert
         assertNotNull(fournisseur1);
         assertEquals(fournisseur1.getName(),fournisseur.getName());
+    }
+    @Test
+    @DisplayName("Test of Update")
+    public void updateTest(){
+        Fournisseur fournisseur = Fournisseur.builder().name("Fornisseur").build();
+        fournisseurRepository.save(fournisseur);
+        Fournisseur fournisseurSave = fournisseurRepository.findById(fournisseur.getId()).get();
+        fournisseurSave.setName("FoupnisseurUp");
+        Fournisseur updatedFournisseur = fournisseurRepository.save(fournisseurSave);
+        assertNotNull(updatedFournisseur.getName());
+        assertEquals(updatedFournisseur.getName(),"FoupnisseurUp");
+    }
+    @Test
+    @DisplayName("Test of Delete")
+    public void deleteTest(){
+        Fournisseur fournisseur = Fournisseur.builder().name("Fornisseur").build();
+        fournisseurRepository.save(fournisseur);
+        fournisseurRepository.deleteById(fournisseur.getId());
+        Optional<Fournisseur> fournisseurReturn = fournisseurRepository.findById(fournisseur.getId());
+        assertFalse(fournisseurReturn.isPresent());
     }
 }
