@@ -5,17 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,6 +90,5 @@ class FournisseurServiceImplTest {
 		when(fournisseurRepository.existsById(fournisseurId)).thenReturn(true);
 		fournisseurService.deleteFournisseurService(fournisseurId);
 		verify(fournisseurRepository, times(1)).deleteById(fournisseurId);
-
 	}
 }
