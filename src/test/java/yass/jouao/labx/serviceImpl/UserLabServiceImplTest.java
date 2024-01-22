@@ -1,6 +1,7 @@
 package yass.jouao.labx.serviceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,7 @@ class UserLabServiceImplTest {
         userService = new UserLabServiceImpl(userMapper, userRepository);
     }
     @Test
+    @DisplayName("test of getUserLabByIdService ")
     void testGetUserLabByIdService() throws NotFoundException {
         UserLab userLab = UserLab.builder().id(1L).name("UserLabName").password("password").build();
         UserLabDTO userLabDTO = UserLabDTO.builder().id(1L).name("UserLabName").password("password").build();
@@ -48,6 +50,7 @@ class UserLabServiceImplTest {
         verify(userRepository, times(1)).findById(1L);
     }
     @Test
+    @DisplayName("test of addUserLabService ")
     void testAddUserLabService() {
         UserLab userLab = UserLab.builder().id(1L).name("UserLabName").password("password").build();
         UserLabDTO userLabDTO = UserLabDTO.builder().id(1L).name("UserLabName").password("password").build();
@@ -57,6 +60,7 @@ class UserLabServiceImplTest {
         verify(userRepository, times(1)).save(userLab);
     }
     @Test
+    @DisplayName("test of updateUserLabService ")
     public void testUpdateUserLabService() throws IllegalAccessException, NotFoundException {
         Long userLabId = 1L;
         UserLabDTO newUserLabDTO = UserLabDTO.builder().id(userLabId).name("newF").password("password").build();

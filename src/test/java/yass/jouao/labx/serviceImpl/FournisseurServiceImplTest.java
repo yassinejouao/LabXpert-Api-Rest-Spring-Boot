@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,6 +48,7 @@ class FournisseurServiceImplTest {
 		fournisseurService = new FournisseurServiceImpl(fournisseurRepository, fournisseurMapper);
 	}
 	@Test
+	@DisplayName("test of getFournisseurByIdService ")
 	void testGetFournisseurByIdService() throws NotFoundException {
 		Fournisseur fournisseur = Fournisseur.builder().id(1L).name("FournisseurName").build();
 		FournisseurDTO fournisseurDTO = FournisseurDTO.builder().id(1L).name("FournisseurName").build();
@@ -60,6 +62,7 @@ class FournisseurServiceImplTest {
 		verify(fournisseurRepository, times(1)).findById(1L);
 	}
 	@Test
+	@DisplayName("test of addFournisseurService ")
 	void testAddFournisseurService() {
 		Fournisseur fournisseur = Fournisseur.builder().id(1L).name("FournisseurName").build();
 		FournisseurDTO fournisseurDTO = FournisseurDTO.builder().id(1L).name("FournisseurName").build();
@@ -69,6 +72,7 @@ class FournisseurServiceImplTest {
 		verify(fournisseurRepository, times(1)).save(fournisseur);
 	}
 	@Test
+	@DisplayName("test of updateFournisseurService ")
 	public void testUpdateFournisseurService() throws IllegalAccessException, NotFoundException {
 		Long fournisseurId = 1L;
 		FournisseurDTO newFournisseurDTO = FournisseurDTO.builder().id(fournisseurId).name("newF").build();
@@ -87,6 +91,7 @@ class FournisseurServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("test of deleteFournisseurService ")
 	public void deleteFournisseurServiceTest() throws NotFoundException {
 		Long fournisseurId = 1L;
 		when(fournisseurRepository.existsById(fournisseurId)).thenReturn(true);
