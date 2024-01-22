@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 import yass.jouao.labx.DTOs.PatientDTO;
 import yass.jouao.labx.entities.Patient;
 import yass.jouao.labx.exeptions.NotFoundException;
@@ -18,11 +19,11 @@ import yass.jouao.labx.serviceImpl.Mappers.PatientMapper;
 import yass.jouao.labx.services.IPatientService;
 
 @Service
+@AllArgsConstructor
 public class PatientServiceImpl implements IPatientService {
 
-	@Autowired
+
 	private PatientMapper patientMapper;
-	@Autowired
 	private IPatientRepository patientRepository;
 
 	@Override
