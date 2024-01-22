@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO;
 import yass.jouao.labx.DTOs.AnalysisResultDTO;
 import yass.jouao.labx.DTOs.TestDTO;
@@ -40,27 +40,18 @@ import yass.jouao.labx.serviceImpl.Mappers.TestMapper;
 import yass.jouao.labx.services.IAnalysisService;
 
 @Service
+@AllArgsConstructor
 public class AnalysisImpl implements IAnalysisService {
 
-	@Autowired
 	private AnalysisMapper analysisMapper;
-	@Autowired
 	private PatientMapper patientMapper;
-	@Autowired
 	private TestMapper testMapper;
-	@Autowired
 	private TestTypeServiceImpl testTypeServiceImpl;
-	@Autowired
 	private IAnalysisRepository analysisRepository;
-	@Autowired
 	private IPatientRepository patientRepository;
-	@Autowired
 	private ISampleRepository sampleRepository;
-	@Autowired
 	private IUserLabRepository userLabRepository;
-	@Autowired
 	private IAnalysisTypeRepository analysisTypeRepository;
-	@Autowired
 	private ITestRepository testRepository;
 
 	@Override
@@ -84,6 +75,7 @@ public class AnalysisImpl implements IAnalysisService {
 			if (analysisOptional.get().getStatus() == AnalysisStatus.FINISHED) {
 				AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(analysisOptional.get());
 				Collection<Test> tests = analysisOptional.get().getTests();
+				Patient patient = analysisOptional.get().getSample().getPatient();
 				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
 						.collect(Collectors.toList());
 				analysisDTO.setTestsDTO(testDTOs);
