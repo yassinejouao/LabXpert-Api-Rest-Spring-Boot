@@ -35,40 +35,27 @@ class IFournisseurRepositoryTest {
     @Test
     @DisplayName("Test of findAll")
     public void TestFindAll(){
-
-        Fournisseur fournisseur1 = Fournisseur.builder().id(1L).name("Fornisseur1").build();
-        Fournisseur fournisseur2 = Fournisseur.builder().id(2L).name("Fornisseur2").build();
+        //Arange
+        Fournisseur fournisseur1 = Fournisseur.builder().name("Fornisseur1").build();
+        Fournisseur fournisseur2 = Fournisseur.builder().name("Fornisseur2").build();
         fournisseurRepository.save(fournisseur1);
         fournisseurRepository.save(fournisseur2);
-
-        // Retrieve all entities using the findAll() method
-        List<Fournisseur> result = fournisseurRepository.findAll();
-
-        // Verify the results
-      assertEquals(2, result.size());
-        assertEquals("Fornisseur1", result.get(0).getName());
-        assertEquals("Fornisseur2", result.get(1).getName());
-//        //Arange
-//        Fournisseur fournisseur1 = Fournisseur.builder().id(1L).name("Fornisseur1").build();
-//        Fournisseur fournisseur2 = Fournisseur.builder().id(2L).name("Fornisseur2").build();
-//        fournisseurRepository.save(fournisseur1);
-//        fournisseurRepository.save(fournisseur2);
-//        //Act
-//        List<Fournisseur> fournisseurs = fournisseurRepository.findAll();
-//        //Assert
-//        assertNotNull(fournisseurs);
-//        assertEquals(2,fournisseurs.size());
+        //Act
+        List<Fournisseur> fournisseurs = fournisseurRepository.findAll();
+        //Assert
+        assertNotNull(fournisseurs);
+        assertEquals(2,fournisseurs.size());
     }
-//    @Test
-//    @DisplayName("Test of findById")
-//    public void TestFindById(){
-//        //Arange
-//        Fournisseur fournisseur = Fournisseur.builder().id(1L).name("Fornisseur").build();
-//        fournisseurRepository.save(fournisseur);
-//        //Act
-//        Fournisseur fournisseur1 = fournisseurRepository.findById(fournisseur.getId()).get();
-//        //Assert
-//        assertNotNull(fournisseur1);
-//        assertEquals(fournisseur1.getName(),fournisseur.getName());
-//    }
+    @Test
+    @DisplayName("Test of findById")
+    public void TestFindById(){
+        //Arange
+        Fournisseur fournisseur = Fournisseur.builder().name("Fornisseur").build();
+        fournisseurRepository.save(fournisseur);
+        //Act
+        Fournisseur fournisseur1 = fournisseurRepository.findById(fournisseur.getId()).get();
+        //Assert
+        assertNotNull(fournisseur1);
+        assertEquals(fournisseur1.getName(),fournisseur.getName());
+    }
 }
