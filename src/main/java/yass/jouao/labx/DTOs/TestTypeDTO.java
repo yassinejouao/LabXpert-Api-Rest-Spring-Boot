@@ -2,9 +2,15 @@ package yass.jouao.labx.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestTypeDTO {
 	public interface viewTestType {
 	}

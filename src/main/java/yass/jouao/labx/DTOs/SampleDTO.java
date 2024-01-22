@@ -4,11 +4,17 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import yass.jouao.labx.enums.SampleStatus;
 import yass.jouao.labx.enums.SampleType;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SampleDTO {
 
 	public interface saveSample {

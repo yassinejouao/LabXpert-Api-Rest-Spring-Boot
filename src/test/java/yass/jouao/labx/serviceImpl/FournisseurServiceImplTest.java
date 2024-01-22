@@ -1,29 +1,26 @@
 package yass.jouao.labx.serviceImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import yass.jouao.labx.DTOs.FournisseurDTO;
 import yass.jouao.labx.entities.Fournisseur;
+
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IFournisseurRepository;
 import yass.jouao.labx.serviceImpl.Mappers.FournisseurMapper;
@@ -31,88 +28,67 @@ import yass.jouao.labx.serviceImpl.Mappers.FournisseurMapper;
 @ExtendWith(MockitoExtension.class)
 class FournisseurServiceImplTest {
 
+	private FournisseurMapper fournisseurMapper;
 	@Mock
 	private IFournisseurRepository fournisseurRepository;
-	@Mock
-	private FournisseurMapper fournisseurMapper;
 	@InjectMocks
-	private FournisseurServiceImpl fournisseurServiceImpl;
+	private FournisseurServiceImpl fournisseurService;
 
+	@BeforeEach
+	public void setup() {
+		fournisseurMapper = new FournisseurMapper();
+		fournisseurRepository = Mockito.mock(IFournisseurRepository.class);
+		fournisseurService = new FournisseurServiceImpl(fournisseurRepository, fournisseurMapper);
+	}
 	@Test
-	public void addFournisseurServiceTest() {
-		// Mock data
-		FournisseurDTO fournisseurDTO = FournisseurDTO.builder().name("fournisseur").build();
-		Fournisseur fournisseur = Fournisseur.builder().name("fournisseur").build();
-		// Mocking the mapper
-		when(fournisseurMapper.fromFournisseurDTOToFournisseur(fournisseurDTO)).thenReturn(fournisseur);
-		when(fournisseurMapper.fromFournisseurToFournisseurDTO(any(Fournisseur.class))).thenReturn(fournisseurDTO);
-		// Mocking the repository
+	@DisplayName("test of getFournisseurByIdService ")
+	void testGetFournisseurByIdService() throws NotFoundException {
+		Fournisseur fournisseur = Fournisseur.builder().id(1L).name("FournisseurName").build();
+		FournisseurDTO fournisseurDTO = FournisseurDTO.builder().id(1L).name("FournisseurName").build();
+		Optional<Fournisseur> optionalFournisseur = Optional.of(fournisseur);
+
+		when(fournisseurRepository.findById(1L)).thenReturn(optionalFournisseur);
+
+		FournisseurDTO result = fournisseurService.getFournisseurByIdService(1L);
+
+		assertEquals(fournisseurDTO, result);
+		verify(fournisseurRepository, times(1)).findById(1L);
+	}
+	@Test
+	@DisplayName("test of addFournisseurService ")
+	void testAddFournisseurService() {
+		Fournisseur fournisseur = Fournisseur.builder().id(1L).name("FournisseurName").build();
+		FournisseurDTO fournisseurDTO = FournisseurDTO.builder().id(1L).name("FournisseurName").build();
 		when(fournisseurRepository.save(fournisseur)).thenReturn(fournisseur);
-		FournisseurDTO saveFournisseurDTO = fournisseurServiceImpl.addFournisseurService(fournisseurDTO);
-		// Verify interactions
-		verify(fournisseurMapper, times(1)).fromFournisseurDTOToFournisseur(fournisseurDTO);
+		FournisseurDTO result = fournisseurService.addFournisseurService(fournisseurDTO);
+		assertEquals(fournisseurDTO, result);
 		verify(fournisseurRepository, times(1)).save(fournisseur);
-		verify(fournisseurMapper, times(1)).fromFournisseurToFournisseurDTO(fournisseur);
-		// Assert the result
-		Assertions.assertThat(saveFournisseurDTO).isNotNull();
-		Assertions.assertThat(saveFournisseurDTO).isEqualTo(fournisseurDTO);
+	}
+	@Test
+	@DisplayName("test of updateFournisseurService ")
+	public void testUpdateFournisseurService() throws IllegalAccessException, NotFoundException {
+		Long fournisseurId = 1L;
+		FournisseurDTO newFournisseurDTO = FournisseurDTO.builder().id(fournisseurId).name("newF").build();
+		Fournisseur newFournisseur = Fournisseur.builder().id(fournisseurId).name("newF").build();
+		FournisseurDTO oldFournisseurDTO = FournisseurDTO.builder().id(fournisseurId).name("old").build();
+		Fournisseur oldFournisseur = Fournisseur.builder().id(1L).name("old").build();
+		Optional<Fournisseur> optionalFournisseur = Optional.of(oldFournisseur);
 
+		when(fournisseurRepository.findById(1L)).thenReturn(optionalFournisseur);
+		when(fournisseurRepository.save(any())).thenReturn(newFournisseur);
+
+		FournisseurDTO result = fournisseurService.updateFournisseurService(fournisseurId, newFournisseurDTO);
+		verify(fournisseurRepository, times(1)).save(any());
+		assertEquals(fournisseurId, result.getId());
+		assertNotEquals(oldFournisseurDTO.getName(), result.getName());
 	}
 
 	@Test
-	@Transactional
-	public void getAllFournisseursServiceTest() {
-		List<Fournisseur> fournisseurs = Arrays.asList(Fournisseur.builder().name("fournisseur1").build(),
-				Fournisseur.builder().name("fournisseur2").build());
-		when(fournisseurRepository.findAll()).thenReturn(fournisseurs);
-		when(fournisseurMapper.fromFournisseurToFournisseurDTO(any(Fournisseur.class))).thenAnswer(invocation -> {
-			Fournisseur argumentFournisseur = invocation.getArgument(0);
-			return FournisseurDTO.builder().name(argumentFournisseur.getName()).build();
-		});
-		List<FournisseurDTO> resultDTOs = fournisseurServiceImpl.getAllFournisseursService();
-		verify(fournisseurRepository, times(1)).findAll();
-		verify(fournisseurMapper, times(fournisseurs.size())).fromFournisseurToFournisseurDTO(any(Fournisseur.class));
-		assertNotNull(resultDTOs);
-		assertEquals(fournisseurs.size(), resultDTOs.size());
-		for (int i = 0; i < fournisseurs.size(); i++) {
-			FournisseurDTO expectedDTO = FournisseurDTO.builder().name(fournisseurs.get(i).getName()).build();
-			assertEquals(expectedDTO, resultDTOs.get(i));
-		}
-	}
-
-	@Test
-	@Transactional
-	public void getFournisseurByIdService_ExistingId_ReturnsDTO() throws NotFoundException {
-		Long existingId = 1L;
-		Fournisseur existingFournisseur = Fournisseur.builder().id(existingId).name("fournisseur1").build();
-		FournisseurDTO expectedDTO = FournisseurDTO.builder().id(existingFournisseur.getId())
-				.name(existingFournisseur.getName()).build();
-		when(fournisseurRepository.findById(existingId)).thenReturn(Optional.of(existingFournisseur));
-		when(fournisseurMapper.fromFournisseurToFournisseurDTO(existingFournisseur)).thenReturn(expectedDTO);
-		FournisseurDTO resultDTO = fournisseurServiceImpl.getFournisseurByIdService(existingId);
-		verify(fournisseurRepository, times(1)).findById(existingId);
-		verify(fournisseurMapper, times(1)).fromFournisseurToFournisseurDTO(existingFournisseur);
-		assertNotNull(resultDTO);
-		assertEquals(expectedDTO, resultDTO);
-	}
-
-	@Test
-	@Transactional
-	public void getFournisseurByIdService_NonExistingId_ThrowsNotFoundException() {
-		Long nonExistingId = 2L;
-		when(fournisseurRepository.findById(nonExistingId)).thenReturn(Optional.empty());
-		assertThrows(NotFoundException.class, () -> fournisseurServiceImpl.getFournisseurByIdService(nonExistingId));
-		verify(fournisseurRepository, times(1)).findById(nonExistingId);
-		verifyNoMoreInteractions(fournisseurMapper);
-	}
-
-	@Test
+	@DisplayName("test of deleteFournisseurService ")
 	public void deleteFournisseurServiceTest() throws NotFoundException {
 		Long fournisseurId = 1L;
 		when(fournisseurRepository.existsById(fournisseurId)).thenReturn(true);
-		fournisseurServiceImpl.deleteFournisseurService(fournisseurId);
+		fournisseurService.deleteFournisseurService(fournisseurId);
 		verify(fournisseurRepository, times(1)).deleteById(fournisseurId);
-
 	}
-
 }

@@ -2,12 +2,18 @@ package yass.jouao.labx.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO.result;
 import yass.jouao.labx.enums.ResultTest;
 import yass.jouao.labx.enums.TestStatus;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestDTO {
 
 	private long id;

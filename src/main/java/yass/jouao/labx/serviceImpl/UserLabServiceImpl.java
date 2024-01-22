@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,9 @@ import yass.jouao.labx.serviceImpl.Mappers.UserMapper;
 import yass.jouao.labx.services.IUserLabService;
 
 @Service
+@AllArgsConstructor
 public class UserLabServiceImpl implements IUserLabService {
-	@Autowired
 	private UserMapper userMapper;
-	@Autowired
 	private IUserLabRepository userLabRepository;
 
 	@Override

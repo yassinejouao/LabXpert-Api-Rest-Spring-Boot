@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,10 @@ import yass.jouao.labx.serviceImpl.Mappers.FournisseurMapper;
 import yass.jouao.labx.services.IFournisseurService;
 
 @Service
+@AllArgsConstructor
 public class FournisseurServiceImpl implements IFournisseurService {
 
-	@Autowired
 	private IFournisseurRepository fournisseurRepository;
-	@Autowired
 	private FournisseurMapper fournisseurMapper;
 
 	@Override
