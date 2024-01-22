@@ -4,9 +4,15 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReagentDTO {
 	public interface saveReagent {
 	}
