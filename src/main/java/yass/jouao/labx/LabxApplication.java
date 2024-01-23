@@ -1,44 +1,14 @@
 package yass.jouao.labx;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Random;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import yass.jouao.labx.entities.Analysis;
-import yass.jouao.labx.entities.AnalysisType;
-import yass.jouao.labx.entities.Fournisseur;
-import yass.jouao.labx.entities.Patient;
-import yass.jouao.labx.entities.Reagent;
-import yass.jouao.labx.entities.Sample;
-import yass.jouao.labx.entities.Test;
-import yass.jouao.labx.entities.TestReagent;
-import yass.jouao.labx.entities.TestType;
-import yass.jouao.labx.entities.UserLab;
-import yass.jouao.labx.enums.AnalysisStatus;
-import yass.jouao.labx.enums.RoleUser;
-import yass.jouao.labx.enums.SampleStatus;
-import yass.jouao.labx.enums.SampleType;
-import yass.jouao.labx.enums.Sex;
-import yass.jouao.labx.enums.StatusUser;
-import yass.jouao.labx.enums.TestStatus;
-import yass.jouao.labx.repositories.IAnalysisRepository;
-import yass.jouao.labx.repositories.IAnalysisTypeRepository;
-import yass.jouao.labx.repositories.IFournisseurRepository;
-import yass.jouao.labx.repositories.IPatientRepository;
-import yass.jouao.labx.repositories.IReagentRepository;
-import yass.jouao.labx.repositories.ISampleRepository;
-import yass.jouao.labx.repositories.ITestReagentRepository;
-import yass.jouao.labx.repositories.ITestRepository;
-import yass.jouao.labx.repositories.ITestTypeRepository;
-import yass.jouao.labx.repositories.IUserLabRepository;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableWebMvc
+@EnableSwagger2
 public class LabxApplication {
 
 	public static void main(String[] args) {
