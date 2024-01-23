@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import yass.jouao.labx.DTOs.MessageErrorDTO;
 import yass.jouao.labx.DTOs.PatientDTO;
+import yass.jouao.labx.DTOs.UserLabDTO;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.serviceImpl.PatientServiceImpl;
 
@@ -70,7 +71,8 @@ public class PatientController {
 	}
 
 	@PostMapping("/update/{patientId}")
-	public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientDTO patientDTO) {
+	public ResponseEntity<?> updatePatient(@PathVariable Long patientId,
+			@RequestBody @JsonView(PatientDTO.savePatient.class) PatientDTO patientDTO) {
 		try {
 			patientDTO = patientServiceImpl.updatePatientService(patientId, patientDTO);
 			String json = objectMapper.writerWithView(PatientDTO.viewPatient.class).writeValueAsString(patientDTO);

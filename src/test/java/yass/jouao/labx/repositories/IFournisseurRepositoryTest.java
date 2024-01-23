@@ -3,11 +3,13 @@ package yass.jouao.labx.repositories;
 import org.assertj.core.internal.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import yass.jouao.labx.annotations.Group1;
 import yass.jouao.labx.entities.Fournisseur;
 
 import javax.transaction.Transactional;
@@ -23,6 +25,7 @@ class IFournisseurRepositoryTest {
     @Autowired
     private IFournisseurRepository fournisseurRepository;
 
+    @Group1
     @Test
     @DisplayName("Test of save")
     public void testSave(){
