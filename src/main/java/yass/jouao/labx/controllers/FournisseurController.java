@@ -76,7 +76,7 @@ public class FournisseurController {
 			fournisseurDTO = fournisseurServiceImpl.updateFournisseurService(id, fournisseurDTO);
 			String json = objectMapper.writerWithView(FournisseurDTO.viewFournisseur.class)
 					.writeValueAsString(fournisseurDTO);
-			return new ResponseEntity<>(json, HttpStatus.OK);
+			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
 		} catch (NotFoundException e) {
 			MessageErrorDTO errorResponse = new MessageErrorDTO(e.getMessage());
 			return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -76,9 +77,17 @@ public class AnalysisImpl implements IAnalysisService {
 				AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(analysisOptional.get());
 				Collection<Test> tests = analysisOptional.get().getTests();
 				Patient patient = analysisOptional.get().getSample().getPatient();
-				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
-						.collect(Collectors.toList());
+//				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
+//						.collect(Collectors.toList());
+				List<TestDTO> testDTOs = new ArrayList<>();
+				for (Test test : tests) {
+					testDTOs.add(TestDTO.builder().resultTest(test.getResultTest()).result(test.getResult())
+							.status(test.getStatus()).nameTest(test.getTestType().getName())
+							.min(test.getTestType().getMin()).max(test.getTestType().getMax()).build());
+				}
 				analysisDTO.setTestsDTO(testDTOs);
+				analysisDTO.setAnalysisTypeName(analysisOptional.get().getAnalysisType().getName());
+				analysisDTO.setPatientDTO(patientMapper.fromPatientToPatientDTO(patient));
 				return analysisDTO;
 			} else {
 				throw new NotFoundException("analysis not finished yet!");
