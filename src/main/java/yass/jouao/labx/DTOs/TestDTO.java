@@ -23,5 +23,12 @@ public class TestDTO {
 	private ResultTest result;
 	@JsonView({ result.class })
 	private TestStatus status;
+	// USE ONLY IN ADD
+	@JsonView({ result.class })
+	private Double min;
+	@JsonView({ result.class })
+	private Double max;
+	@JsonView({ result.class })
+	private String nameTest;
 
 }

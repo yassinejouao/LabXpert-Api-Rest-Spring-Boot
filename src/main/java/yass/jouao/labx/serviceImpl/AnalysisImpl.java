@@ -4,15 +4,16 @@ import java.lang.reflect.Field;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO;
 import yass.jouao.labx.DTOs.AnalysisResultDTO;
 import yass.jouao.labx.DTOs.TestDTO;
@@ -40,27 +41,18 @@ import yass.jouao.labx.serviceImpl.Mappers.TestMapper;
 import yass.jouao.labx.services.IAnalysisService;
 
 @Service
+@AllArgsConstructor
 public class AnalysisImpl implements IAnalysisService {
 
-	@Autowired
 	private AnalysisMapper analysisMapper;
-	@Autowired
 	private PatientMapper patientMapper;
-	@Autowired
 	private TestMapper testMapper;
-	@Autowired
 	private TestTypeServiceImpl testTypeServiceImpl;
-	@Autowired
 	private IAnalysisRepository analysisRepository;
-	@Autowired
 	private IPatientRepository patientRepository;
-	@Autowired
 	private ISampleRepository sampleRepository;
-	@Autowired
 	private IUserLabRepository userLabRepository;
-	@Autowired
 	private IAnalysisTypeRepository analysisTypeRepository;
-	@Autowired
 	private ITestRepository testRepository;
 
 	@Override
@@ -84,9 +76,18 @@ public class AnalysisImpl implements IAnalysisService {
 			if (analysisOptional.get().getStatus() == AnalysisStatus.FINISHED) {
 				AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(analysisOptional.get());
 				Collection<Test> tests = analysisOptional.get().getTests();
-				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
-						.collect(Collectors.toList());
+				Patient patient = analysisOptional.get().getSample().getPatient();
+//				List<TestDTO> testDTOs = tests.stream().map(test -> testMapper.fromTestToTestDTO(test))
+//						.collect(Collectors.toList());
+				List<TestDTO> testDTOs = new ArrayList<>();
+				for (Test test : tests) {
+					testDTOs.add(TestDTO.builder().resultTest(test.getResultTest()).result(test.getResult())
+							.status(test.getStatus()).nameTest(test.getTestType().getName())
+							.min(test.getTestType().getMin()).max(test.getTestType().getMax()).build());
+				}
 				analysisDTO.setTestsDTO(testDTOs);
+				analysisDTO.setAnalysisTypeName(analysisOptional.get().getAnalysisType().getName());
+				analysisDTO.setPatientDTO(patientMapper.fromPatientToPatientDTO(patient));
 				return analysisDTO;
 			} else {
 				throw new NotFoundException("analysis not finished yet!");

@@ -31,6 +31,11 @@ public class AnalysisDTO implements Serializable {
 	public interface result {
 	}
 
+	// USE ONLY IN RESULT
+	@JsonView({ result.class })
+	private String analysisTypeName;
+	// RESULT
+
 	@JsonView({ viewAnalysis.class, result.class, updateAnalysis.class })
 	private long id;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })
@@ -41,7 +46,7 @@ public class AnalysisDTO implements Serializable {
 	private Boolean resultAnalysis;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class, result.class })
 	private AnalysisStatus status;
-	@JsonView({ viewAnalysis.class })
+	@JsonView({ viewAnalysis.class, result.class })
 	private PatientDTO patientDTO;
 	@JsonView({ result.class })
 	private List<TestDTO> testsDTO;
