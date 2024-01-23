@@ -99,16 +99,20 @@ public class TestServiceImpl implements ITestService {
 			testRepository.save(testOptional.get());
 			Analysis analysis = testOptional.get().getAnalysis();
 			List<Test> testsByanalysis = testRepository.findByAnalysis(analysis);
-			Boolean analysisvalidity = true;
+			Boolean analysisvalidity = false;
+			int i = 0;
 			for (Test test : testsByanalysis) {
 				if (test.getResult() == ResultTest.WAITING) {
 					return true;
 				} else if (test.getResult() == ResultTest.INVALID) {
 					analysisvalidity = false;
-					return true;
+					break;
+				} else if (test.getResult() == ResultTest.VALID) {
+					analysisvalidity = true;
 				}
+				i++;
 			}
-			if (analysisvalidity) {
+			if (analysisvalidity || (!analysisvalidity && i < testsByanalysis.size())) {
 				analysis.setResultAnalysis(analysisvalidity);
 				analysis.setStatus(AnalysisStatus.FINISHED);
 				analysisRepository.save(analysis);
