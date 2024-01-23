@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/adilfettach/craftStore-With-spring-core-testing'
+                git branch: 'master', url: 'https://github.com/yassinjouao/LabXpert-Api-Rest-Spring-Boot'
             }
         }
 
