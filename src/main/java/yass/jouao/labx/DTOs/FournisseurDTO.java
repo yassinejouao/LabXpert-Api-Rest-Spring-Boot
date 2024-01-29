@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import yass.jouao.labx.enums.StatusField;
 
 @Data
 @Builder
@@ -22,4 +23,5 @@ public class FournisseurDTO {
 	private long id;
 	@JsonView({ viewFournisseur.class, saveFournisseur.class })
 	private String name;
+	private StatusField status;
 }

@@ -35,7 +35,6 @@ public class AnalysisDTO implements Serializable {
 	@JsonView({ result.class })
 	private String analysisTypeName;
 	// RESULT
-
 	@JsonView({ viewAnalysis.class, result.class, updateAnalysis.class })
 	private long id;
 	@JsonView({ viewAnalysis.class, saveAnalysis.class, updateAnalysis.class })

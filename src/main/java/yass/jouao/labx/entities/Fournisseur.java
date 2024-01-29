@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import yass.jouao.labx.enums.StatusField;
 
 @Entity
 @Data
@@ -26,6 +29,8 @@ public class Fournisseur {
 	private long id;
 	@Column(nullable = false, unique = true)
 	private String name;
+	@Enumerated(EnumType.STRING)
+	private StatusField status = StatusField.ACTIVE;
 	@OneToMany(mappedBy = "fournisseur", fetch = FetchType.LAZY)
 	private Collection<Reagent> reagents;
 }
