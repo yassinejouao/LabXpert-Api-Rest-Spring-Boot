@@ -23,5 +23,6 @@ public class FournisseurDTO {
 	private long id;
 	@JsonView({ viewFournisseur.class, saveFournisseur.class })
 	private String name;
+	@JsonView({ viewFournisseur.class, saveFournisseur.class })
 	private StatusField status;
 }
