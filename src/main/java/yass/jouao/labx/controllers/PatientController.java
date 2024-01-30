@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import yass.jouao.labx.DTOs.MessageErrorDTO;
 import yass.jouao.labx.DTOs.PatientDTO;
-import yass.jouao.labx.DTOs.UserLabDTO;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.serviceImpl.PatientServiceImpl;
 
 @RestController
 @RequestMapping("/patient")
+@CrossOrigin("*")
 public class PatientController {
 	@Autowired
 	private PatientServiceImpl patientServiceImpl;
