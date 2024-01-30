@@ -1,14 +1,15 @@
 package yass.jouao.labx.serviceImpl;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 import yass.jouao.labx.DTOs.UserLabDTO;
 import yass.jouao.labx.entities.UserLab;
 import yass.jouao.labx.exeptions.NotFoundException;
@@ -21,6 +22,14 @@ import yass.jouao.labx.services.IUserLabService;
 public class UserLabServiceImpl implements IUserLabService {
 	private UserMapper userMapper;
 	private IUserLabRepository userLabRepository;
+
+	@Override
+	public List<UserLabDTO> getAllUserLabService() {
+		List<UserLab> userLabs = userLabRepository.findAll();
+		List<UserLabDTO> userLabDTOs = userLabs.stream().map(userlab -> userMapper.fromUserToUserDTO(userlab))
+				.collect(Collectors.toList());
+		return userLabDTOs;
+	}
 
 	@Override
 	@Transactional

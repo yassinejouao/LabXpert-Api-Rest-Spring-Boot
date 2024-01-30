@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import yass.jouao.labx.enums.Sex;
+import yass.jouao.labx.enums.StatusField;
 
 @Entity
 @Data
@@ -39,6 +40,8 @@ public class Patient {
 	private Sex sex;
 	@Column(nullable = false)
 	private String phone;
+	@Enumerated(EnumType.STRING)
+	private StatusField status = StatusField.ACTIVE;
 	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
 	private Collection<Sample> samples;
 	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)

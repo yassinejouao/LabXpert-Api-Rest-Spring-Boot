@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO.result;
 import yass.jouao.labx.DTOs.AnalysisDTO.viewAnalysis;
 import yass.jouao.labx.enums.Sex;
+import yass.jouao.labx.enums.StatusField;
 
 @Data
 @Builder
@@ -42,4 +43,6 @@ public class PatientDTO implements Serializable {
 	private Sex sex;
 	@JsonView({ viewPatient.class, savePatient.class, updatePatient.class })
 	private String phone;
+	@JsonView({ viewPatient.class, savePatient.class, updatePatient.class })
+	private StatusField status;
 }

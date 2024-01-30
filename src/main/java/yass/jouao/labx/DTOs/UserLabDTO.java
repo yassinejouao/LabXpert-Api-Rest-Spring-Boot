@@ -18,15 +18,19 @@ public class UserLabDTO {
 	public interface saveUser {
 	}
 
+	public interface viewUser {
+	}
+
+	@JsonView({ viewUser.class })
 	private long id;
-	@JsonView({ saveUser.class })
+	@JsonView({ saveUser.class, viewUser.class })
 	private String name;
 	@JsonView({ saveUser.class })
 	private String password;
-	@JsonView({ saveUser.class })
+	@JsonView({ saveUser.class, viewUser.class })
 	private RoleUser userRole;
-	@JsonView({ saveUser.class })
+	@JsonView({ saveUser.class, viewUser.class })
 	private String information;
-	@JsonView({ saveUser.class })
+	@JsonView({ saveUser.class, viewUser.class })
 	private StatusUser status;
 }
