@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import yass.jouao.labx.DTOs.AnalysisDTO.result;
 import yass.jouao.labx.DTOs.AnalysisDTO.viewAnalysis;
+import yass.jouao.labx.DTOs.SampleDTO.viewSample;
 import yass.jouao.labx.enums.Sex;
 import yass.jouao.labx.enums.StatusField;
 
@@ -33,9 +34,11 @@ public class PatientDTO implements Serializable {
 
 	@JsonView({ viewPatient.class, updatePatient.class })
 	private long id;
-	@JsonView({ viewPatient.class, result.class, savePatient.class, updatePatient.class, viewAnalysis.class })
+	@JsonView({ viewPatient.class, result.class, savePatient.class, viewSample.class, updatePatient.class,
+			viewAnalysis.class, viewSample.class })
 	private String firstname;
-	@JsonView({ viewPatient.class, result.class, savePatient.class, updatePatient.class, viewAnalysis.class })
+	@JsonView({ viewPatient.class, result.class, savePatient.class, viewSample.class, updatePatient.class,
+			viewAnalysis.class, viewSample.class })
 	private String lastname;
 	@JsonView({ viewPatient.class, savePatient.class, updatePatient.class })
 	private LocalDate dateOfBirth;

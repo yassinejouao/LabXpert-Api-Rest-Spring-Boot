@@ -15,6 +15,7 @@ import yass.jouao.labx.entities.Sample;
 import yass.jouao.labx.exeptions.NotFoundException;
 import yass.jouao.labx.repositories.IPatientRepository;
 import yass.jouao.labx.repositories.ISampleRepository;
+import yass.jouao.labx.serviceImpl.Mappers.PatientMapper;
 import yass.jouao.labx.serviceImpl.Mappers.SampleMapper;
 import yass.jouao.labx.services.ISampleService;
 
@@ -23,6 +24,8 @@ public class SampleServiceImpl implements ISampleService {
 
 	@Autowired
 	private SampleMapper sampleMapper;
+	@Autowired
+	private PatientMapper patientMapper;
 	@Autowired
 	private IPatientRepository patientRepository;
 	@Autowired
@@ -37,6 +40,18 @@ public class SampleServiceImpl implements ISampleService {
 		} else {
 			throw new NotFoundException("Patient not found");
 		}
+	}
+
+	@Override
+	public List<SampleDTO> getAllSamplesService() {
+		List<Sample> samples = sampleRepository.findAll();
+		List<SampleDTO> sampleDTOs = samples.stream().map(sample -> {
+			Patient patient = sample.getPatient();
+			SampleDTO sampleDTO = sampleMapper.fromSampleToSampleDTO(sample);
+			sampleDTO.setPatientDTO(patientMapper.fromPatientToPatientDTO(patient));
+			return sampleDTO;
+		}).collect(Collectors.toList());
+		return sampleDTOs;
 	}
 
 	@Override

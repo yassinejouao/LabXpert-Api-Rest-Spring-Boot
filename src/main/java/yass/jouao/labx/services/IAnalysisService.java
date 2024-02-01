@@ -12,6 +12,8 @@ public interface IAnalysisService {
 
 	List<AnalysisDTO> getAllAnalysisInProgress() throws NotFoundException;
 
+	List<AnalysisDTO> getAllAnalysis() throws NotFoundException;
+
 	AnalysisDTO getResultByAnalysisId(Long id) throws NotFoundException;
 
 	List<AnalysisDTO> getAnalysisByIdPatientService(Long id) throws NotFoundException;

@@ -34,6 +34,8 @@ public class SampleDTO {
 	private SampleStatus status;
 	@JsonView({ saveSample.class, viewSample.class })
 	private LocalDateTime date;
+	@JsonView({ viewSample.class })
+	private PatientDTO patientDTO;
 	// USE IN ADD TO AFFECT USER
 	@JsonView({ saveSample.class })
 	private long idPatient;

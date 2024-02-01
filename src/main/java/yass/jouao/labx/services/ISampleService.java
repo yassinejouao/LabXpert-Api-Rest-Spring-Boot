@@ -15,6 +15,8 @@ public interface ISampleService {
 
 	Sample getSampleByIdService(Long id) throws NotFoundException;
 
+	List<SampleDTO> getAllSamplesService();
+
 	SampleDTO updateSampleService(Long id, SampleDTO s) throws NotFoundException, IllegalAccessException;
 
 }

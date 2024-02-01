@@ -70,6 +70,19 @@ public class AnalysisImpl implements IAnalysisService {
 	}
 
 	@Override
+	public List<AnalysisDTO> getAllAnalysis() throws NotFoundException {
+		List<Analysis> analysisInProgress = analysisRepository.findAll();
+		List<AnalysisDTO> analysisDTOs = analysisInProgress.stream().map(aIProgress -> {
+			Patient patient = aIProgress.getPatient();
+			AnalysisDTO analysisDTO = analysisMapper.fromAnalysisToAnalysisDTO(aIProgress);
+			analysisDTO.setPatientDTO(patientMapper.fromPatientToPatientDTO(patient));
+			return analysisDTO;
+
+		}).collect(Collectors.toList());
+		return analysisDTOs;
+	}
+
+	@Override
 	public AnalysisDTO getResultByAnalysisId(Long id) throws NotFoundException {
 		Optional<Analysis> analysisOptional = analysisRepository.findById(id);
 		if (analysisOptional.isPresent()) {
