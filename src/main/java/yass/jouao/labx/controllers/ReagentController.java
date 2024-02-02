@@ -32,6 +32,28 @@ public class ReagentController {
 	@Autowired
 	private ReagentServiceImpl reagentService;
 
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getReagentById(@PathVariable Long id) {
+		try {
+			ReagentDTO reagentDTOs = reagentService.getReagentDTOByIdService(id);
+			String json = objectMapper.writerWithView(ReagentDTO.viewReagent.class).writeValueAsString(reagentDTOs);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<?> getAllReagent() {
+		try {
+			List<ReagentDTO> reagentDTOs = reagentService.getAllReagentsService();
+			String json = objectMapper.writerWithView(ReagentDTO.viewReagent.class).writeValueAsString(reagentDTOs);
+			return new ResponseEntity<>(json, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping("/add")
 	public ResponseEntity<?> addReagent(@RequestBody @JsonView(ReagentDTO.saveReagent.class) ReagentDTO rDTO) {
 		try {
